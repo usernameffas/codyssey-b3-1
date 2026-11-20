@@ -1,4 +1,5 @@
 name: Deploy B1-1 portfolio for B3-1 practice
+# Pages source enabled; re-run deployment after configuration.
 
 on:
   push:
