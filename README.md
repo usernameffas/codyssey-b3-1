@@ -13,6 +13,19 @@
 - [최신 서버·Docker·HTTPS 구성도 SVG](docs/architecture-current.svg) — 기존 `docs/architecture.png`는 초기 초안이므로 제출할 PNG는 실제 값으로 교체해야 함
 - **리소스 삭제는 사용자 요청으로 보류**되어 있으며 완료로 표기하지 않습니다.
 
+## 최신 서버 종합 검증 — 7개 항목 완료 (2026-11-22 19:16 KST)
+
+[실제 명령어·검증 출력 7개 항목 전문](docs/validation-2026-11-22.md)
+
+- `systemctl`: Nginx `active` / Docker `active`
+- `docker ps`: `nginx:alpine` 컨테이너 `b31-docker` `Up 2 hours`; 8080→80 포트 매핑
+- `curl -I http://localhost:8080/` → `HTTP/1.1 200 OK`
+- `curl -I http://localhost/` → `HTTP/1.1 200 OK`
+- `curl -i https://codyssey-b31-web.duckdns.org/health` → `HTTP/1.1 200 OK`; `ok`
+- `sudo certbot certificates`: ECDSA 인증서 유효(89일), 만료일 2027-02-20
+- `sudo nginx -t`: 구문 검사 성공
+- EC2 파일로 로그 저장: `~/b31-validation.txt`. AWS 리소스 삭제는 **보류**.
+
 ## 실습 목적 및 구성
 
 - 필수: AWS VPC 네트워크를 구성하고 EC2에서 웹사이트를 외부에 HTTP로 공개
