@@ -37,6 +37,14 @@
 - IGW ID 뒷자리는 모바일 화면에서 생략되어 추정하지 않았습니다.
 - 개인 알림·계정 관련 정보가 표시된 원본 화면은 공개 저장소에 게시하지 않고 텍스트 검증값만 기록했습니다.
 
+## IAM 실습 계정의 실제 권한 거부 검증 (2026-11-22 19:32 KST)
+
+- 실습 계정 `b31-learner`로 IAM 정책 목록에 접근할 때 AWS에서 `iam:ListPolicies` 권한 거부 표시
+- 상세 원인: `no identity-based policy allows the action`
+- **의미:** 최소 권한 설계에 따라 허용되지 않은 관리 API 접근이 차단된 실제 사례
+- **범위의 한계:** 이 오류만으로 전체 정책 JSON이나 S3·RDS 권한 범위까지 증명할 수는 없음
+- [실제 AWS 콘솔 거부 내용과 IAM/보안 그룹 역할 비교](docs/iam-permission-verification-2026-11-22.md)
+
 ## 실습 목적 및 구성
 
 - 필수: AWS VPC 네트워크를 구성하고 EC2에서 웹사이트를 외부에 HTTP로 공개
