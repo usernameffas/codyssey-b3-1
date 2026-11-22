@@ -4,6 +4,86 @@
 >
 > 최초 계획과 실제 실행에 차이가 있습니다. 이 README의 명령은 **실제로 실행한 방식**을 기록합니다. [초기 실습 안내](docs/manual.md)는 참고 자료입니다.
 
+## 자동평가용 확인 출력 — 실제 실습 기록 발췌 (2026-11-22)
+
+**[자세한 텍스트 증빙 및 출처·검증 범위](docs/terminal-evidence-audit-2026-11-22.md)**
+
+아래는 EC2 Instance Connect 실제 터미널 및 AWS 콘솔 화면에 나타난 핵심 결과를 **텍스트로 옮긴 것**입니다. 전체 로그를 원문 그대로 복사한 파일은 EC2에 `~/b31-validation.txt`, `~/b31-network-validation.txt`로 저장돼 있습니다. AWS 콘솔 기록은 CLI 실행 결과가 아니라 화면 표시값입니다.
+
+**AWS VPC 콘솔 실제 설정값** (`b31-rtb-public` 라우팅 탭, 19:29 KST):
+
+```text
+VPC: b31-vpc
+VPC ID: vpc-03069500f8707f0f9
+VPC CIDR: 10.10.0.0/16
+Route Table: b31-rtb-public (rtb-00e3c2f405b2e1ea0)
+Main: No
+Explicit association: b31-subnet-public1-ap-northeast-2a
+Subnet ID: subnet-0814ca163de8b1b5f
+10.10.0.0/16 -> local -> Active
+0.0.0.0/0 -> Internet Gateway -> Active
+```
+
+**Ubuntu 네트워크·SSH 및 수신 포트** (19:19 KST, 발췌):
+
+```console
+$ ip -4 addr show dev ens5
+inet 10.10.4.1/20 brd 10.10.15.255 scope global dynamic ens5
+
+$ ip -4 route
+default via 10.10.0.1 dev ens5 proto dhcp src 10.10.4.1 metric 100
+
+$ sudo ss -lntp | grep -E ':(22|80|443|8080)\b'
+[발췌] sshd :22 / nginx :80, :443 / docker-proxy :8080
+```
+
+SSH는 휴대전화 브라우저에서 **EC2 Instance Connect → Ubuntu `ubuntu` 계정**으로 접속했습니다. `ip -4 route` 결과는 **Ubuntu 내부 네트워크 라우트**, `0.0.0.0/0 → IGW`는 **AWS VPC 라우팅 테이블**의 경로입니다.
+
+**실행 서비스·Docker·HTTP·HTTPS·인증서** (19:16 KST, 발췌):
+
+```console
+$ sudo systemctl is-active nginx docker
+active
+active
+
+$ sudo docker ps
+[발췌] b31-docker / nginx:alpine / Up 2 hours / 0.0.0.0:8080->80/tcp
+
+$ curl -I --max-time 10 http://localhost:8080/
+HTTP/1.1 200 OK
+Content-Length: 10227
+
+$ curl -I --max-time 10 http://localhost/
+HTTP/1.1 200 OK
+Server: nginx/1.24.0 (Ubuntu)
+
+$ curl -i --max-time 10 https://codyssey-b31-web.duckdns.org/health
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 2
+
+ok
+
+$ sudo certbot certificates
+Certificate Name: codyssey-b31-web.duckdns.org
+Key Type: ECDSA
+Expiry Date: 2027-02-20 08:01:17+00:00 (VALID: 89 days)
+
+$ sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+
+**IAM 계정에서 실제로 확인한 권한 거부** (AWS IAM 콘솔, 19:32 KST):
+
+```text
+IAM user: b31-learner
+Action: iam:ListPolicies
+Access denied: no identity-based policy allows the action
+```
+
+위 출력은 **서버 실행·접근 제한의 실제 확인값**입니다. 정책의 전체 JSON, IGW의 전체 ID, 최종 삭제 증빙 등 **미확인 정보는 만들어서 추가하지 않았습니다.** 평가 항목 #4는 **외부 접속 방식 A 또는 `/health` 호출**에 관한 항목이며, 그 결과는 위의 HTTPS `200 OK`와 외부 브라우저 `ok` 표시로 확인했습니다.
+
 ## AI 사전평가 확인 (2026-11-22)
 
 - 코디세이 사이트의 최근 AI 사전평가 결과는 **6% (16항목 중 1항목 PASS)**입니다.
@@ -118,7 +198,7 @@ curl -I http://localhost:8080      # HTTP/1.1 200 OK, Nginx 1.31.1
 - 보안 그룹에서 8080 포트를 외부에 추가 개방하지 않았습니다.
 - 참고: 현재 Docker `-p 8080:80`은 호스트의 여러 인터페이스에 바인딩됩니다. 계속 운영할 때는 필요에 따라 루프백 바인딩으로 제한할 수 있습니다.
 
-호스트 Nginx 설정을 백업하고 아래 리버스 프록시로 변경했습니다.
+호스트 Nginx 설정을 백업하고 **Docker 적용 당시에는 아래 HTTP 전용 임시 리버스 프록시**로 변경했습니다. **현재 운영 중인 설정은 이후 DuckDNS·Certbot을 통해 443 TLS와 `/health`가 추가된 상태**입니다. 아래 블록은 당시의 이력이며 최종 설정 파일 전체를 뜻하지 않습니다.
 
 ```nginx
 server {
