@@ -1,0 +1,55 @@
+name: Capture live external B3-1 browser evidence
+on:
+  push:
+    paths:
+      - .github/workflows/capture-external-proof.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify live external HTTP, HTTPS and health endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/evidence
+          printf 'B3-1 external verification performed by GitHub Actions\n' > docs/evidence/automated-external-check.txt
+          printf 'Time UTC: %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> docs/evidence/automated-external-check.txt
+          for url in 'http://43.202.56.199/' 'https://codyssey-b31-web.duckdns.org/' 'https://codyssey-b31-web.duckdns.org/health'; do
+            code=$(curl --location --silent --show-error --output /dev/null --max-time 25 --write-out '%{http_code}' "$url")
+            printf '%s -> HTTP %s\n' "$url" "$code" | tee -a docs/evidence/automated-external-check.txt
+            test "$code" = "200"
+          done
+          health=$(curl --fail --silent --show-error --max-time 25 'https://codyssey-b31-web.duckdns.org/health')
+          printf 'HTTPS /health body: %s\n' "$health" >> docs/evidence/automated-external-check.txt
+          test "$health" = "ok"
+
+      - name: Capture live public portfolio without phone notifications
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          echo "Capturing with: $CHROME"
+          timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/portfolio-https-live.png 'https://codyssey-b31-web.duckdns.org/'
+          timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/health-https-live.png 'https://codyssey-b31-web.duckdns.org/health'
+          file docs/evidence/portfolio-https-live.png docs/evidence/health-https-live.png
+          test -s docs/evidence/portfolio-https-live.png
+          test -s docs/evidence/health-https-live.png
+
+      - name: Commit real external access evidence
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/evidence/portfolio-https-live.png docs/evidence/health-https-live.png docs/evidence/automated-external-check.txt
+          if git diff --cached --quiet; then
+            echo "No external evidence changes."
+          else
+            git commit -m "Capture live external HTTP HTTPS and health browser evidence"
+            git push
+          fi
