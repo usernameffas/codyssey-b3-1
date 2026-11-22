@@ -124,6 +124,37 @@ sudo docker logs --tail 10 b31-docker
 - 인증서 발급 성공 후 브라우저에서 포트폴리오 정상 렌더링 확인. 모바일 주소창에서는 긴 주소가 일부 생략되어 표시되므로 **인증서 발급 로그·전체 주소 정보·브라우저 화면**을 함께 증빙할 것.
 - 추후 검증 권장: `curl -I https://codyssey-b31-web.duckdns.org/` 와 `sudo certbot renew --dry-run` (실제 결과 확인 전까지 성공으로 기록하지 않음)
 
+### /health 상태 점검 엔드포인트 — 2026-11-22 검증 완료
+
+- 목적: 호스트 Nginx의 HTTP/HTTPS 리스너가 요청을 수신하고 간단한 응답을 반환하는지 확인. **Docker 내부 상태나 데이터베이스 상태까지 검증하는 기능은 아님**.
+- 최초 확인: `curl -i http://localhost/health` → `HTTP/1.1 404 Not Found` (미설정 상태)
+- 설정 파일: `/etc/nginx/sites-available/default` (호스트 Nginx, 현재 하나의 `server` 블록이 80/443 모두 수신)
+- 수정 전 원본 백업: `/etc/nginx/sites-available/default.before-health`
+- `server` 블록 내부에 추가한 지시문:
+
+```nginx
+location = /health { default_type text/plain; return 200 "ok"; }
+```
+
+- 문법 검사: `sudo nginx -t` → `syntax is ok`, `test is successful`
+- 설정 반영: `sudo systemctl reload nginx`
+- 실제 HTTPS 검증 명령: `curl -i https://codyssey-b31-web.duckdns.org/health`
+- 검증 출력(스크린샷에서 확인한 헤더·본문):
+
+```http
+HTTP/1.1 200 OK
+Server: nginx/1.24.0 (Ubuntu)
+Date: Sun, 22 Nov 2026 10:03:15 GMT
+Content-Type: text/plain
+Content-Length: 2
+Connection: keep-alive
+
+ok
+```
+
+- 결과: HTTPS 443 연결 및 호스트 Nginx의 `/health` 응답 성공. 기존 `location /`의 Docker 리버스 프록시 설정과 Let's Encrypt TLS 설정은 보존함.
+- 확인 시각: 2026-11-22 19:03 KST.
+
 ### 확인한 접속 화면
 
 - 필수 검증: `http://43.202.56.199/`에서 B1-1 포트폴리오 정상 표시
