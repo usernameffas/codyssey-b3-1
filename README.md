@@ -227,9 +227,9 @@ sudo docker logs --tail 10 b31-docker
 | 웹 서비스 외부 접속 방법·주소·캡처 | [실제 HTTPS 브라우저 PNG](docs/evidence/portfolio-https-live.png) · [HTTP/HTTPS 상태 기록](docs/evidence/automated-external-check.txt) | **외부 브라우저 자동 촬영·GitHub 업로드 완료**; 원본 휴대전화 캡처는 비공개 보관 |
 | 트러블슈팅 보고서 (최소 1건) | [docs/troubleshooting.md](docs/troubleshooting.md) | **실제 기록 작성** |
 | 리소스 정리 체크리스트 | [docs/cleanup-checklist.md](docs/cleanup-checklist.md) | **정리 절차 기록 / 삭제 아직 미진행** |
-| Docker 보너스: 이미지·실행·포트·캡처 2장 이상 | 이 README 및 `docs/evidence/` | **실행·검증 완료 / 스크린샷 GitHub 업로드 필요** |
+| Docker 보너스: 이미지·실행·포트·캡처 2장 이상 | [실제 `docker ps` 터미널 크롭본](docs/evidence/docker_ps_actual_redacted.png) · [외부 HTTPS 포트폴리오 캡처](docs/evidence/portfolio-https-live.png) · [검증 텍스트](docs/validation-2026-11-22.md) | **필수 두 종류 스크린샷 GitHub 업로드 완료**. 원본 모바일 캡처는 비공개 보관 |
 
-과제에서는 Docker 보너스에 **`docker ps`에서 Up인 화면과 외부 접속 결과 화면**을 각 1장 이상 요구합니다. 대화에서 확인한 캡처는 GitHub 저장소에 아직 업로드되지 않았습니다. `docs/evidence/`에 업로드한 후 여기 링크를 추가합니다.
+과제에서 요구한 Docker **`docker ps` Up 실제 터미널 화면**과 **외부 접속 결과 화면**을 GitHub에 업로드했습니다. 전자는 실제 터미널 캡처에서 휴대전화 알림·AWS 계정 상단을 제거한 크롭본이고, 후자는 GitHub Actions의 Chrome이 운영 중인 사이트를 직접 방문해 새로 촬영한 화면입니다. 인증정보가 포함될 수 있는 원본 모바일 사진은 별도 비공개 보관 대상으로 유지합니다.
 
 ### 보너스 1 — HTTPS 인증서 발급 및 적용 (완료)
 
@@ -286,12 +286,13 @@ ok
 ### 제출용 증빙 이미지
 
 - [실제 AWS 구성도 최종 PNG](docs/architecture.png) — 퍼블릭 서브넷·라우팅 테이블·보안 그룹·EC2·Docker·HTTPS를 실제 값으로 표현
+- [**Docker ps Up 실제 터미널 화면**](docs/evidence/docker_ps_actual_redacted.png) — 실제 사용자 캡처에서 알림·계정 상단 부분을 제외한 크롭본
 - [외부 HTTPS 포트폴리오 화면](docs/evidence/portfolio-https-live.png) — GitHub Actions 브라우저가 실제 운영 웹사이트에 접속해 2026-11-22 촬영한 **새 스크린샷**. 한국어 정상 렌더링 확인
 - [외부 HTTPS /health 화면](docs/evidence/health-https-live.png) — 실제 브라우저의 `ok` 표시
 - [외부 HTTP/HTTPS 응답 텍스트](docs/evidence/automated-external-check.txt) — IP HTTP, 도메인 HTTPS, /health 각 200 및 본문 ok 확인
 - [이미지별 업로드 현황](docs/evidence/README.md)
 
-**실제 휴대전화·AWS 콘솔 원본 사진**에는 휴대전화 알림 및 계정 정보가 표시되므로 공개 저장소에 업로드하지 않았습니다. 별도의 비공개 Imprint에 보관할 예정이며, 공개 제출에 필요한 Docker `docker ps` 원본 캡처 등은 민감정보를 제거한 사본이 필요합니다. GitHub Actions로 촬영한 외부 브라우저 이미지는 **실제 서비스 접속 결과**이며 터미널 스크린샷을 대체해 만들었다고 표현하지 않습니다.
+**실제 휴대전화·AWS 콘솔 원본 사진**에는 휴대전화 알림 및 계정 정보가 표시되므로 공개 저장소에 업로드하지 않았습니다. 별도의 비공개 Imprint에 보관할 예정이며, 민감정보를 제외한 Docker `docker ps` 크롭본은 공개 저장소에 올렸습니다. GitHub Actions로 촬영한 외부 브라우저 이미지는 **실제 서비스 접속 결과**이며 터미널 스크린샷을 대체해 만들었다고 표현하지 않습니다.
 
 ### 구성도 및 오류 분석
 
