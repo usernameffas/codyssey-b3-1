@@ -10,16 +10,16 @@
 
 | # | 평가 화면에서 제시한 쟁점 | 실습·문서 현황 | 보완 또는 확인 |
 |---|---|---|---|
-| 1 | VPC CIDR, local 및 0.0.0.0/0 → Internet Gateway 라우팅 | README·architecture.md에 기록, 설정 화면은 대화에서 확인 | IGW 연결, 라우트 테이블과 서브넷의 실제 연결 화면을 별도 증빙해야 함 |
+| 1 | VPC CIDR, local 및 0.0.0.0/0 → Internet Gateway 라우팅 | **19:29 AWS 콘솔에서 VPC ID, 퍼블릭 서브넷 명시적 연결, 활성 경로 2개 직접 확인**. [실제 값 기록](network-console-verification-2026-11-22.md) | 공개 텍스트 증빙 작성 완료. 재평가 결과는 확인 전 |
 | 2 | SSH/원격 접속 방식과 HTTP 200 응답 | EC2 Instance Connect로 접속, curl 200 응답 확인 | EIC 원리, 보안 그룹 22 제한과 실제 접속 증빙을 하나의 절로 설명 |
 | 3 | 보안 그룹 HTTP/SSH 설명 | 평가에서 PASS | 기존 근거 보존 |
 | 4 | 실제 SSH 접속 증빙 | EIC 터미널 캡처가 대화에 존재 | GitHub 증빙 폴더에 민감정보 제외하고 캡처 추가 |
 | 5 | EC2·EBS 등 리소스 정리 체크리스트 | 작성 완료, **실제 삭제는 사용자 요청으로 보류** | 삭제 완료로 허위 표기하지 않음. 승인 후 수행·완료 기록 필요 |
-| 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | docs/architecture.md에 구조 설명, docs/architecture.png는 초기 초안 | 최신 구성도 PNG/PDF 업로드 필요; [현재 SVG 구조도](architecture-current.svg) 참고 |
+| 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | 실제 VPC/서브넷/라우팅 테이블 ID와 활성 경로 확인. [최신 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) | **필수 제출 PNG/PDF는 최신 구성을 반영한 최종본인지 점검 필요** |
 | 7 | HTTPS 443·보안 그룹 설정 증빙 | 443 인바운드 규칙 추가 화면 확인 | 화면 캡처와 규칙 목적·출처 범위를 함께 정리 |
 | 8 | 외부 접속 방식 A와 URL·화면 | 브라우저에서 HTTP와 HTTPS 포트폴리오 확인 | 실제 브라우저 캡처, 명시적 URL, 설정 전후 결과를 함께 링크 |
 | 9 | 리소스 삭제 후 잔여 자원 확인 | 아직 보류 | 최종 제출 전 실제 정리 요구를 어떻게 충족할지 확인 필요 |
-| 10 | 퍼블릭 서브넷 라우팅과 outbound | 인터넷 게이트웨이로의 기본 경로를 기록함 | inbound 보안 그룹과 route table/SG outbound의 개념을 구분해 설명 |
+| 10 | 퍼블릭 서브넷 라우팅과 outbound | 라우트 테이블의 IGW 기본 경로와 명시적 서브넷 연결을 AWS 콘솔에서 확인. 게스트 Ubuntu의 기본 라우트와 구분해 기록 | [확인값](network-console-verification-2026-11-22.md). SG outbound 규칙의 실제 화면은 필요시 추가 |
 | 11 | IAM 최소 권한과 Security Group 보안의 역할 | 제한 IAM 계정 `b31-learner`와 정책 사용, SG 22 출처 제한 | IAM 정책 권한 목록·적용 근거 추가. 확인되지 않은 정책 내용은 단정 금지 |
 | 12 | HTTPS 443을 0.0.0.0/0으로 허용한 범위 | 공개 웹 서비스의 HTTPS 접속을 위해 443 전체 허용 | 공개 웹 포트는 모든 IPv4 허용이 의도된 설정임을 설명. SSH 22와 구분 |
 | 13 | 브라우저 오류·네트워크 로그와 개인 정보 | docs/troubleshooting.md에 오류 과정 기록 | 원본 로그 전체 업로드는 URL·계정정보 포함 가능성이 있어 익명화된 요약·화면만 공유 |
