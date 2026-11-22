@@ -11,8 +11,8 @@
 | # | 평가 화면에서 제시한 쟁점 | 실습·문서 현황 | 보완 또는 확인 |
 |---|---|---|---|
 | 1 | VPC CIDR, local 및 0.0.0.0/0 → Internet Gateway 라우팅 | **19:29 AWS 콘솔에서 VPC ID, 퍼블릭 서브넷 명시적 연결, 활성 경로 2개 직접 확인. 20:24에는 `b31-igw`의 전체 ID `igw-09322346b5d9055a8`도 직접 확인**. [실제 값 기록](network-console-verification-2026-11-22.md) | 공개 텍스트 증빙 작성 완료. 재평가 결과는 확인 전 |
-| 2 | SSH/원격 접속 방식과 HTTP 200 응답 | **실제 EC2 Instance Connect의 `ubuntu` 접속**, `ip -4 addr show dev ens5`, `ip -4 route`, `sudo ss -lntp`, `curl` HTTP 200을 [README와 텍스트 출력](terminal-evidence-audit-2026-11-22.md)에 기록 | SSH 허용 출처 전체 CIDR과 AWS SG 세부 규칙은 화면 재확인 시 추가 |
-| 3 | 보안 그룹 HTTP/SSH 설명 | 평가에서 PASS | 기존 근거 보존 |
+| 2 | SSH/원격 접속 방식과 HTTP 200 응답 | **실제 EC2 Instance Connect의 `ubuntu` 접속**, `ip -4 addr show dev ens5`, `ip -4 route`, `sudo ss -lntp`, `curl` HTTP 200을 [README와 텍스트 출력](terminal-evidence-audit-2026-11-22.md)에 기록 | **직접 SSH는 단일 개인 IPv4 `/32`, EIC는 AWS 관리형 접두사 목록**으로 확인. [기록](ssh-security-verification-2026-11-22.md). 개인 IP는 공개에서 마스킹, EIC 목록 ID는 미검증 |
+| 3 | 보안 그룹 HTTP/SSH 설명 | 평가에서 PASS. **[SSH 직접 접속 단일 /32 및 EIC 관리형 출처를 텍스트로 정리](ssh-security-verification-2026-11-22.md)** | 보안 그룹 변경 없음. EIC 관리형 목록 ID의 전체 문자열은 추가 확인 가능 |
 | 4 | **외부 접속 검증 방식 A(브라우저) 또는 `/health` 확인** | **실제 외부 Chrome에서 포트폴리오 표시**, `/health`에서 `HTTP/1.1 200 OK`와 `ok` 확인. [README에 직접 출력](../README.md), [검증값](terminal-evidence-audit-2026-11-22.md) 보완 | 이전 보완표에서 SSH 증빙으로 분류한 부분 정정. 원본 과제의 외부 접속 증빙 화면은 별도 제출 필요 |
 | 5 | EC2·EBS 등 리소스 정리 체크리스트 | 작성 완료, **실제 삭제는 사용자 요청으로 보류** | 삭제 완료로 허위 표기하지 않음. 승인 후 수행·완료 기록 필요 |
 | 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | [**최종 PNG**](architecture.png)를 실제 ID·라우팅·Nginx·Docker·HTTPS 반영해 GitHub에 업로드 완료. [편집 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) 보유 | 문서·이미지 구성 완료. 평가 재실행은 아직 전 |
