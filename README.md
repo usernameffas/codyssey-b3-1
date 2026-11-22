@@ -4,6 +4,8 @@
 >
 > 최초 계획과 실제 실행에 차이가 있습니다. 이 README의 명령은 **실제로 실행한 방식**을 기록합니다. [초기 실습 안내](docs/manual.md)는 참고 자료입니다.
 
+**[사진을 설명 바로 아래에 배치한 B3-1 증빙 보기](docs/evidence/visual-guide.md)** — AWS 구성도, Docker `Up`, 외부 HTTPS 포트폴리오, `/health` 실제 화면을 순서대로 볼 수 있습니다. 원본 캡처에 계정/개인 알림이 있거나 사진이 없는 항목은 텍스트 확인값만 표시했습니다. **AI 사전평가용 명령 출력은 아래에 그대로 유지했습니다.**
+
 ## 자동평가용 확인 출력 — 실제 실습 기록 발췌 (2026-11-22)
 
 **[자세한 텍스트 증빙 및 출처·검증 범위](docs/terminal-evidence-audit-2026-11-22.md)**
@@ -335,6 +337,7 @@ ok
 - [외부 HTTPS 포트폴리오 화면](docs/evidence/portfolio-https-live.png) — GitHub Actions 브라우저가 실제 운영 웹사이트에 접속해 2026-11-22 촬영한 **새 스크린샷**. 한국어 정상 렌더링 확인
 - [외부 HTTPS /health 화면](docs/evidence/health-https-live.png) — 실제 브라우저의 `ok` 표시
 - [외부 HTTP/HTTPS 응답 텍스트](docs/evidence/automated-external-check.txt) — IP HTTP, 도메인 HTTPS, /health 각 200 및 본문 ok 확인
+- [**설명 바로 아래 실제 증빙 사진을 붙인 보기 편한 문서**](docs/evidence/visual-guide.md)
 - [이미지별 업로드 현황](docs/evidence/README.md)
 
 **실제 휴대전화·AWS 콘솔 원본 사진**에는 휴대전화 알림 및 계정 정보가 표시되므로 공개 저장소에 업로드하지 않았습니다. 별도의 비공개 Imprint에 보관할 예정이며, 민감정보를 제외한 Docker `docker ps` 크롭본은 공개 저장소에 올렸습니다. GitHub Actions로 촬영한 외부 브라우저 이미지는 **실제 서비스 접속 결과**이며 터미널 스크린샷을 대체해 만들었다고 표현하지 않습니다.
