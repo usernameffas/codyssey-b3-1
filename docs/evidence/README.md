@@ -30,7 +30,7 @@
 | 08 | Let's Encrypt 인증서 발급·설치 | [README Certbot 기록](../../README.md), [실제 인증서 유효기간 출력](../validation-2026-11-22.md) | 텍스트 증빙 완료; Certbot 원본 스크린샷은 비공개 보관 대상 |
 | 09 | HTTPS 포트폴리오 외부 화면 | [실제 Chrome 외부 캡처](portfolio-https-live.png), [HTTP 200 기록](automated-external-check.txt) | **공개 업로드 완료** |
 | 10 | EC2 Instance Connect SSH 및 서버 응답 | [SSH 명령·호스트 출력](../terminal-evidence-audit-2026-11-22.md), [7항목 실제 검증](../validation-2026-11-22.md) | 텍스트 증빙 완료; 별도 휴대전화 SSH 사진은 공개 보류 |
-| 11 | 퍼블릭 라우팅 테이블·서브넷 연결 | [AWS 콘솔 실제 값](../network-console-verification-2026-11-22.md): 2개 경로 활성, 서브넷 명시적 연결 | 텍스트 증빙 완료; 계정 표시가 있는 콘솔 사진 공개 보류. **IGW 전체 ID는 추가 확인 전** |
+| 11 | 퍼블릭 라우팅 테이블·서브넷 연결 | [AWS 콘솔 실제 값](../network-console-verification-2026-11-22.md): 2개 경로 활성, 서브넷 명시적 연결 | 텍스트 증빙 완료; 계정 표시가 있는 콘솔 사진 공개 보류. **과제용 IGW 전체 ID `igw-09322346b5d9055a8`은 20:24 KST 콘솔 목록에서 확인** |
 | 12 | 실습 종료 후 자원 정리 | [정리 체크리스트](../cleanup-checklist.md) | **사용자 요청으로 실제 자원 삭제·정리 보류**. 삭제 완료 증빙도 보류 |
 
 ## 공개·비공개 증빙 원칙
