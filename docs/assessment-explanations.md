@@ -42,6 +42,7 @@ Docker b31-docker · nginx:alpine · 컨테이너 :80
 
 **[실제 증거]**
 - 공인 IP에 접속하여 웹 포트폴리오 렌더링 확인: `http://43.202.56.199/` (실습 당시)
+- **방식 A에 직접 대응하는 공인 IP HTTP 브라우저 캡처:** [2026-11-22 GitHub Actions Chrome 실접속 사진](evidence/portfolio-http-public-ip-live.png), [촬영 코드](../.github/workflows/capture-external-proof.yml) 및 [외부 HTTP 200 기록](evidence/automated-external-check.txt). 브라우저 화면은 실제로 확인함.
 - 외부 도메인에서 HTTPS 포트폴리오 렌더링 확인: `https://codyssey-b31-web.duckdns.org/`
 - 호스트 `curl -I http://localhost/` → `HTTP/1.1 200 OK`
 - 컨테이너 `curl -I http://localhost:8080/` → `HTTP/1.1 200 OK`
