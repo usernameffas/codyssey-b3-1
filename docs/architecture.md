@@ -2,6 +2,12 @@
 
 > 이 문서는 이미지 구성도의 검증용 텍스트 원본입니다. 과제 제출 형식은 **PNG 또는 PDF 이미지 1장**입니다. [최종 PNG](architecture.png)를 2026-11-22에 실제 확인값으로 갱신했으며, [편집용 SVG](architecture-current.svg)도 보존했습니다.
 
+**실제 구축값을 반영한 아키텍처 이미지**
+
+![AWS 실습의 실제 값으로 만든 VPC, IGW, EC2, Docker, HTTPS 구조도](architecture.png)
+
+아래는 같은 구성을 텍스트로 풀어 쓴 것입니다. AI 평가기가 이미지를 읽지 못하는 경우도 이 내용을 확인할 수 있습니다.
+
 ```text
                  외부 Chrome / Samsung Internet
                 HTTP TCP 80 / HTTPS TCP 443
