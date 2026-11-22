@@ -8,6 +8,7 @@
 |---|---|---|
 | [../architecture.png](../architecture.png) | VPC·퍼블릭 서브넷·라우팅 테이블·IGW·보안 그룹·EC2·Nginx·Docker·HTTPS | 확인된 AWS 설정값으로 만든 최종 구성도 |
 | [docker_ps_actual_redacted.png](docker_ps_actual_redacted.png) | Docker `b31-docker`, `nginx:alpine`, `Up`, 8080→80 | 실제 사용자 SSH 터미널 스크린샷에서 식별정보가 있는 바깥 영역을 제외한 크롭본 |
+| [portfolio-http-public-ip-live.png](portfolio-http-public-ip-live.png) | **평가 방식 A**: 외부 Chrome에서 공인 IPv4 `http://43.202.56.199/`의 실제 포트폴리오 표시 | GitHub Actions Chrome의 실접속 새 촬영, 2026-11-22; HTTP 200 별도 기록 |
 | [portfolio-https-live.png](portfolio-https-live.png) | 인터넷에서 HTTPS 포트폴리오 정상 렌더링 | GitHub Actions Chrome으로 **실제 운영 중 사이트에 외부 접속해 새로 촬영**, 한국어 폰트 포함 |
 | [health-https-live.png](health-https-live.png) | 외부 HTTPS `/health`에 `ok` 표시 | 실제 외부 브라우저로 촬영 |
 | [automated-external-check.txt](automated-external-check.txt) | HTTP 공인 IP / HTTPS 도메인 / HTTPS `/health` 각 200, 응답 본문 `ok` | GitHub Actions에서 실제 HTTP 요청 실행 후 저장 |
@@ -24,7 +25,7 @@
 
 | 기존 증빙 번호 | 검증할 내용 | 현재 확인된 텍스트·이미지 근거 | 공개 업로드 상태 / 후속 검토 |
 |---|---|---|---|
-| 01 | 공인 IP HTTP 외부 포트폴리오 | [자동 외부 요청 기록](automated-external-check.txt): `http://43.202.56.199/` → 200, [README](../../README.md)에 방식 A 설명 | HTTP 전용 브라우저 캡처는 별도 미업로드. **HTTPS 화면은 업로드 완료**. 최종 제출에서 HTTP 스크린샷을 특정해 요구할 경우 추가 |
+| 01 | 공인 IP HTTP 외부 포트폴리오 | [자동 외부 요청 기록](automated-external-check.txt): `http://43.202.56.199/` → 200, [README](../../README.md)에 방식 A 설명 | **HTTP 전용 외부 브라우저 캡처 업로드 완료**. [실제 이미지](portfolio-http-public-ip-live.png)와 [촬영 워크플로](../../.github/workflows/capture-external-proof.yml) 확인 |
 | 02 | Docker `docker ps` Up·포트 | [실제 터미널 크롭본](docker_ps_actual_redacted.png), [명령 출력 검증](../validation-2026-11-22.md) | **공개 업로드 완료** |
 | 03 | Docker 자체 HTTP 200 | [실제 `curl` 텍스트](../validation-2026-11-22.md): `http://localhost:8080/` → `HTTP/1.1 200 OK` | 텍스트 증빙 완료; 별도 터미널 사진은 선택 |
 | 04 | Docker access log | [실제 로그 내용 요약](../troubleshooting.md): HTML/CSS/JS 요청 200, favicon 404 | 전체 로그 원문과 별도 캡처는 미업로드; 추가 제출 요구 때 보완 |
