@@ -114,6 +114,28 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 
 **추가 검증된 사실:** 2026-11-22 20:14 KST에 다시 조회해도 이 7개 검증 출력과 `~/b31-validation.txt` 저장 상태가 유지되었습니다. 조회 당시의 출력은 **19:16 KST에 실행해 저장된 기록**이므로 이후 서버 상태를 20:14 시점에 실시간으로 다시 측정했다고 주장하지 않습니다.
 
+## 실제 증빙 사진 — 명령 결과 바로 아래 확인
+
+### Docker: `b31-docker` 실행 중
+
+`sudo docker ps` 출력에 `nginx:alpine`, `Up 2 hours`, 호스트 `8080` → 컨테이너 `80`이 보입니다. 사용자 EC2 터미널 캡처에서 공개용으로 바깥의 식별정보만 제외한 실제 이미지입니다.
+
+![Docker ps 실제 터미널 결과와 실행 중인 b31-docker](evidence/docker_ps_actual_redacted.png)
+
+### 외부 HTTPS 포트폴리오
+
+실제 접속 대상은 `https://codyssey-b31-web.duckdns.org/`입니다. 아래는 GitHub Actions Chrome에서 **실제 운영 사이트를 방문하여 새로 촬영한 외부 웹 화면**입니다.
+
+![외부 HTTPS 포트폴리오 화면](evidence/portfolio-https-live.png)
+
+### HTTPS `/health` 정상 응답
+
+텍스트 출력에 `HTTP/1.1 200 OK`, `Content-Length: 2`, 본문 `ok`가 기록되어 있습니다. 아래 사진은 외부 Chrome에 표시된 실제 `ok` 화면입니다.
+
+![HTTPS health에 ok가 표시된 실제 화면](evidence/health-https-live.png)
+
+이미지에는 브라우저 주소창이 없으므로 **전체 URL과 외부 응답 코드**는 [자동 외부 검증 텍스트](evidence/automated-external-check.txt)를 함께 확인합니다.
+
 ## 확인 범위
 
 - 호스트 Ubuntu Nginx와 Docker 컨테이너의 **서비스 활성 상태 및 HTTP 응답**을 확인했습니다.
