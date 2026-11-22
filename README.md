@@ -100,7 +100,7 @@ Action: iam:ListPolicies
 Access denied: no identity-based policy allows the action
 ```
 
-위 출력은 **서버 실행·접근 제한의 실제 확인값**입니다. Docker 표는 실제 `docker ps` 화면의 줄바꿈을 필드별로 재배열했으며, **[저장된 7항목 검증 결과 재확인과 HTTP 헤더 전문](docs/validation-2026-11-22.md)**을 별도로 기록했습니다. 정책의 전체 JSON과 최종 삭제 증빙 등 **미확인 정보는 만들어서 추가하지 않았습니다.** IGW의 전체 ID는 20:24 KST AWS 콘솔에서 확인해 기록했습니다. 평가 항목 #4는 **외부 접속 방식 A 또는 `/health` 호출**에 관한 항목이며, 그 결과는 위의 HTTPS `200 OK`와 외부 브라우저 `ok` 표시로 확인했습니다.
+위 출력은 **서버 실행·접근 제한의 실제 확인값**입니다. Docker 표는 실제 `docker ps` 화면의 줄바꿈을 필드별로 재배열했으며, **[저장된 7항목 검증 결과 재확인과 HTTP 헤더 전문](docs/validation-2026-11-22.md)**을 별도로 기록했습니다. 최종 리소스 삭제 증빙 등 **미확인 정보는 만들어서 추가하지 않았습니다.** `B31PracticePolicy`의 전체 JSON은 이후 관리자 계정에서 확인해 별도 문서로 기록했습니다. IGW의 전체 ID는 20:24 KST AWS 콘솔에서 확인해 기록했습니다. 평가 항목 #4는 **외부 접속 방식 A 또는 `/health` 호출**에 관한 항목이며, 그 결과는 위의 HTTPS `200 OK`와 외부 브라우저 `ok` 표시로 확인했습니다.
 
 ## AI 사전평가 확인 (2026-11-22)
 
@@ -140,7 +140,7 @@ Access denied: no identity-based policy allows the action
 - 실습 계정 `b31-learner`로 IAM 정책 목록에 접근할 때 AWS에서 `iam:ListPolicies` 권한 거부 표시
 - 상세 원인: `no identity-based policy allows the action`
 - **의미:** 최소 권한 설계에 따라 허용되지 않은 관리 API 접근이 차단된 실제 사례
-- **범위의 한계:** 이 오류만으로 전체 정책 JSON이나 S3·RDS 권한 범위까지 증명할 수는 없음
+- **이후 관리자 계정에서 전체 JSON 확인 완료:** [B31PracticePolicy 원문·36개 Action·서울 리전 조건 분석](docs/iam-policy-json-review-2026-11-22.md). `Resource: "*"` 및 EC2·VPC 삭제 권한 포함. 실제 연결된 사용자와 다른 정책의 영향은 추가 확인 대상
 - [실제 AWS 콘솔 거부 내용과 IAM/보안 그룹 역할 비교](docs/iam-permission-verification-2026-11-22.md)
 
 ## 사전평가 설명 보완 — 2026-11-22
@@ -149,7 +149,7 @@ Access denied: no identity-based policy allows the action
 
 - **방식 A**: 기존 B1-1 포트폴리오의 화면·정적 파일이 외부 모바일 브라우저에서 정상 표시되는 것을 직접 확인하기 위해 선택. 공인 IP HTTP 및 DuckDNS HTTPS 웹사이트 접속 확인.
 - **443 공개**: 공개 HTTPS 웹사이트의 특정 서비스 포트를 `0.0.0.0/0`에서 허용. 외부 악의적 요청 가능성, SSH 22 출처 제한, TLS와 애플리케이션 보안의 차이, 추가 대응을 기술.
-- **IAM**: `b31-learner`의 `iam:ListPolicies` 거부는 실제 관찰. **최소 권한을 단계적으로 늘리는 절차는 설계·제안이며 실제 정책 JSON 전체는 아직 확인 전**.
+- **IAM**: `b31-learner`의 `iam:ListPolicies` 거부 및 [`B31PracticePolicy` JSON 전체](docs/iam-policy-json-review-2026-11-22.md)를 직접 확인. `Resource: "*"`와 `TerminateInstances` 등 폭넓은 실습 권한이 포함되어 엄격한 리소스 단위 최소 권한과는 구별. **연결된 엔터티와 다른 정책은 추가 확인 필요**.
 - **장애 점검**: VPC 라우팅 → 보안 그룹 → 공인 IP/DNS → Nginx → Docker → HTTPS/브라우저. 실제 Chrome HTTP 오류 사례와 분리해 설명.
 - **확장·비용**: 단일 EC2의 CPU·메모리·네트워크·응답 시간·에러율 점검 지표, ALB 도입을 고려하는 상황, 비용 관리 및 리소스 삭제 체크리스트. **ALB 도입은 미실시**, 삭제는 사용자 요청으로 보류.
 
@@ -167,7 +167,7 @@ Access denied: no identity-based policy allows the action
 | 서브넷 | `b31-subnet-public1-ap-northeast-2a` (퍼블릭) |
 | 라우팅 | `10.10.0.0/16 → local`; `0.0.0.0/0 → b31-igw (igw-09322346b5d9055a8)` (퍼블릭 서브넷에 라우트 테이블 명시 연결) |
 | 보안 그룹 | **`b31-web-sg` (`sg-04bc2bb098cb7bbd1`)**, HTTP TCP 80 / HTTPS TCP 443을 `0.0.0.0/0`에 공개, SSH TCP 22는 직접 SSH용 `/32` 및 EC2 Instance Connect 전용 접속원 범위로 제한. **직접 SSH의 출처는 단일 IPv4 /32, EIC 출처는 AWS 관리형 접두사 목록으로 확인**. 공개 문서에서 개인 공인 IP는 가리고, 관리형 접두사 목록의 전체 ID는 추후 확인 |
-| IAM | 실습용 `b31-learner`, `B31PracticePolicy` 등 제한 권한 |
+| IAM | 실습용 `b31-learner`의 `iam:ListPolicies` 거부 확인, [`B31PracticePolicy` 전체 JSON](docs/iam-policy-json-review-2026-11-22.md) 확인. 서울 리전 제한 및 `Resource: "*"`·EC2 종료 권한 포함 |
 | EC2 | `b31-web`, `i-07336ff478ba4ef67`, `t3.micro` |
 | 운영체제 / 디스크 | Ubuntu 24.04 LTS / EBS gp3 8 GiB |
 | 공인 IPv4 | `43.202.56.199` (**실습 당시 주소, 중지·재시작 시 변경 가능**) |
