@@ -17,13 +17,13 @@
 | 5 | EC2·EBS 등 리소스 정리 체크리스트 | 작성 완료, **실제 삭제는 사용자 요청으로 보류** | 삭제 완료로 허위 표기하지 않음. 승인 후 수행·완료 기록 필요 |
 | 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | [**최종 PNG**](architecture.png)를 실제 ID·라우팅·Nginx·Docker·HTTPS 반영해 GitHub에 업로드 완료. [편집 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) 보유 | 문서·이미지 구성 완료. 평가 재실행은 아직 전 |
 | 7 | HTTPS 443·보안 그룹 설정 증빙 | 443 인바운드 규칙 추가 화면 확인 | 화면 캡처와 규칙 목적·출처 범위를 함께 정리 |
-| 8 | 외부 접속 방식 A와 URL·화면 | [A 선택 이유 및 HTTP/HTTPS 검증값](assessment-explanations.md) 보완, [7항목 실행 결과](validation-2026-11-22.md) 확보 | 브라우저 캡처 공개 제출용 가공본 업로드는 별도 |
+| 8 | 외부 접속 방식 A와 URL·화면 | [A 선택 이유](assessment-explanations.md), [7항목 출력](validation-2026-11-22.md), [실제 HTTPS 브라우저 캡처](evidence/portfolio-https-live.png), [외부 HTTP/HTTPS 자동검증](evidence/automated-external-check.txt) 확보 | 공인 IP HTTP 전용 화면은 미업로드. HTTPS 공개 접속 화면은 업로드 완료 |
 | 9 | 리소스 태그·이름 규칙과 관리 | AWS 실제 리소스에 **`b31-` 접두어** 사용: `b31-vpc`, `b31-subnet-public1-ap-northeast-2a`, `b31-rtb-public`, `b31-web-sg`, `b31-web`. [README 실제 명명 규칙](../README.md#리소스-이름-규칙과-태그-적용-상태--실제-생성-리소스-기준)으로 설명 완료 | 추가 사용자 정의 `Project` 태그는 미설정·보류; 이 항목을 삭제 검증으로 잘못 분류한 기존 표를 수정함 |
 | 10 | 퍼블릭 서브넷 라우팅과 outbound | 라우트 테이블의 IGW 기본 경로와 명시적 서브넷 연결을 AWS 콘솔에서 확인. 게스트 Ubuntu의 기본 라우트와 구분해 기록 | [확인값](network-console-verification-2026-11-22.md). SG outbound 규칙의 실제 화면은 필요시 추가 |
 | 11 | IAM 최소 권한과 Security Group 보안의 역할 | [IAM vs SG 구분 및 절차](assessment-explanations.md), [`iam:ListPolicies` 실제 거부 기록](iam-permission-verification-2026-11-22.md) 작성 | 정책 전체 JSON과 다른 서비스의 허용 Action은 관리자 계정 확인 전 |
 | 12 | HTTPS 443을 0.0.0.0/0으로 허용한 범위 | 공개 HTTPS의 목적·외부 스캔과 악성 요청 위험·SSH와 차이·TLS 한계·향후 완화책을 [설명 문서](assessment-explanations.md)에 기록 | 추가 보호 기술은 제안이며 현재 적용으로 주장하지 않음 |
 | 13 | 브라우저 오류·네트워크 로그와 개인 정보 | docs/troubleshooting.md에 오류 과정 기록 | 원본 로그 전체 업로드는 URL·계정정보 포함 가능성이 있어 익명화된 요약·화면만 공유 |
-| 14 | 오류 해결의 증상→가설→검증→조치→결과 | [실제 Chrome 오류 사례](troubleshooting.md), [라우팅→SG→IP/DNS→서버→Docker 점검 순서](assessment-explanations.md), [실행 검증](validation-2026-11-22.md) 정리 | 스크린샷 공개용 가공본 별도 업로드 필요 |
+| 14 | 오류 해결의 증상→가설→검증→조치→결과 | [실제 Chrome 오류 사례](troubleshooting.md), [라우팅→SG→IP/DNS→서버→Docker 점검 순서](assessment-explanations.md), [실행 검증](validation-2026-11-22.md) 정리 | 텍스트 설명은 작성됨. 원본 브라우저 오류 캡처는 비공개 보관 및 필요시 제출용 가공 검토 |
 | 15 | IAM 실제 최소 권한 검증 | `iam:ListPolicies` 실제 접근 거부 확인; [최소 권한을 단계적으로 부여하는 절차](assessment-explanations.md) 서술 | 정책 JSON·전체 허용/거부 동작은 아직 검증 전, 절차는 설계상 권고 |
 | 16 | 단일 EC2에서 ALB 확장 고려 및 운영 설명 | [CPU·메모리·오류율·지연·비용 추적 및 ALB 도입 기준](assessment-explanations.md) 작성 | ALB는 추가 비용이 드는 확장 설계로 이번에는 미설치 |
 
