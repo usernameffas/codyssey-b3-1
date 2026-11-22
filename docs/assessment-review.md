@@ -15,7 +15,7 @@
 | 3 | 보안 그룹 HTTP/SSH 설명 | 평가에서 PASS | 기존 근거 보존 |
 | 4 | **외부 접속 검증 방식 A(브라우저) 또는 `/health` 확인** | **실제 외부 Chrome에서 포트폴리오 표시**, `/health`에서 `HTTP/1.1 200 OK`와 `ok` 확인. [README에 직접 출력](../README.md), [검증값](terminal-evidence-audit-2026-11-22.md) 보완 | 이전 보완표에서 SSH 증빙으로 분류한 부분 정정. 원본 과제의 외부 접속 증빙 화면은 별도 제출 필요 |
 | 5 | EC2·EBS 등 리소스 정리 체크리스트 | 작성 완료, **실제 삭제는 사용자 요청으로 보류** | 삭제 완료로 허위 표기하지 않음. 승인 후 수행·완료 기록 필요 |
-| 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | 실제 VPC/서브넷/라우팅 테이블 ID와 활성 경로 확인. [최신 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) | **필수 제출 PNG/PDF는 최신 구성을 반영한 최종본인지 점검 필요** |
+| 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | [**최종 PNG**](architecture.png)를 실제 ID·라우팅·Nginx·Docker·HTTPS 반영해 GitHub에 업로드 완료. [편집 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) 보유 | 문서·이미지 구성 완료. 평가 재실행은 아직 전 |
 | 7 | HTTPS 443·보안 그룹 설정 증빙 | 443 인바운드 규칙 추가 화면 확인 | 화면 캡처와 규칙 목적·출처 범위를 함께 정리 |
 | 8 | 외부 접속 방식 A와 URL·화면 | [A 선택 이유 및 HTTP/HTTPS 검증값](assessment-explanations.md) 보완, [7항목 실행 결과](validation-2026-11-22.md) 확보 | 브라우저 캡처 공개 제출용 가공본 업로드는 별도 |
 | 9 | 리소스 삭제 후 잔여 자원 확인 | 아직 보류 | 최종 제출 전 실제 정리 요구를 어떻게 충족할지 확인 필요 |
@@ -48,7 +48,7 @@
 
 ## 제출용 증빙에서 남은 작업
 
-1. 실제 구성 PNG/PDF와 원본 캡처를 GitHub 저장소에 첨부 및 파일 링크 점검 (현재 별도 묶음 자료는 있으나 GitHub 업로드는 별도 상태)
+1. **아키텍처 PNG 최종 교체 완료**. 원본 캡처의 공개 제출용 비식별 사본 및 Docker 요구 사진 2장 이상은 GitHub 업로드 전
 2. `iam:ListPolicies` 실제 거부는 문서화 완료. `B31PracticePolicy`의 전체 Action JSON·정책 연결 범위는 관리자 계정에서 확인 필요
 3. 마지막에 사용자가 승인한 경우에 한해 자원 정리 및 실제 삭제 완료 화면 확보
 4. 다시 AI 사전평가를 실행해 남은 항목을 확인
