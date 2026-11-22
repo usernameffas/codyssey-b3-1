@@ -12,12 +12,16 @@
 
 자동화 소스는 [capture-external-proof.yml](../../.github/workflows/capture-external-proof.yml)이며 **실제 서비스에 외부 접속해 캡처한 파일**입니다. 사진에 브라우저 주소창은 포함되지 않으므로 URL은 `automated-external-check.txt` 및 README에 별도로 명시합니다. **실제 사용자 휴대전화 화면을 대체한 것으로 속여 제출하지 않습니다.**
 
+## 실제 터미널에서 추출한 공개용 증빙
+
+[Docker ps 실제 터미널 크롭본](docker_ps_actual_redacted.png)은 2026-11-22 실제 EC2 Instance Connect 화면에서 명령어와 출력이 있는 부분만 남긴 자료입니다. **화면 합성·문구 변경 없이 원본을 잘라 확대·고대비 처리**했으며, 원본 전화 알림과 계정 표시 줄은 포함하지 않았습니다. Docker의 `Up` 상태는 [명령어 텍스트 검증](../validation-2026-11-22.md)과 교차 검증할 수 있습니다.
+
 ## 원본 모바일 캡처 중 아직 별도 업로드가 필요한 자료
 
 | 권장 파일명 | 촬영 내용 | 무엇을 입증하는가 | 상태 |
 |---|---|---|---|
 | `01_http_portfolio.png` | Chrome 공인 IP HTTP 포트폴리오 | EC2 외부 HTTP 접속 | 업로드 필요 |
-| `02_docker_ps.png` | `sudo docker ps` 출력 | `b31-docker`의 `Up`, 이미지와 포트 | 업로드 필요 |
+| [docker_ps_actual_redacted.png](docker_ps_actual_redacted.png) | **사용자 실제 EC2 터미널 사진에서 휴대전화·AWS 헤더만 크롭**; `sudo docker ps` 출력 | `b31-docker`의 `Up`, 이미지·포트 매핑 | **공개용 크롭본 업로드 완료**. 원본 사진은 비공개 보관 대상 |
 | `03_docker_curl.png` | `curl -I http://localhost:8080` | 컨테이너 HTTP 200 | 업로드 필요 |
 | `04_docker_logs.png` | Docker access log | 정적 파일 및 요청 성공 | 업로드 필요 |
 | `05_duckdns_record.png` | DuckDNS 이름·current IP | DNS 연결 | 업로드 필요; **token 및 계정 정보 반드시 제거** |
