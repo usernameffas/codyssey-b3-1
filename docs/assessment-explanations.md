@@ -89,9 +89,9 @@ Docker b31-docker · nginx:alpine · 컨테이너 :80
 3. 특정 VPC·EC2 등에 제한이 가능한 작업은 리소스 ARN 및 조건 키를 검토한다. **`Resource: "*"`를 모든 작업에 일괄 적용하지 않고**, 필요한 AWS API에 대해서만 검토한다.
 4. IAM 실습 사용자에게 정책을 연결해 작업을 시도하고, AccessDenied가 발생하면 **실제 거부된 API·리소스·조건**을 확인한다.
 5. 그 작업이 과제에 반드시 필요할 때에만 해당 권한을 좁게 추가하고 다시 시험한다. S3·RDS·IAM 전체 관리 등의 불필요한 권한을 임의로 추가하지 않는다.
-6. 실습 종료 후 필요 없어진 권한과 임시 자격증명을 정리한다. 실제 정책 전체 JSON은 관리자 권한으로 검토해야 한다.
+6. 실습 종료 후 필요 없어진 권한과 임시 자격증명을 정리한다. **실제 `B31PracticePolicy` 전체 JSON은 관리자 계정에서 확인했으며, 결과는 [별도 분석](iam-policy-json-review-2026-11-22.md)에 기록했다.**
 
-**[실제 정책 검증의 한계]** `B31PracticePolicy`의 **전체 정책 JSON과 연결된 허용 Action 목록**은 아직 관리자 계정에서 확인하지 않았다. `iam:ListPolicies` 거부 **한 건**만으로 AWS 전 영역에서 최소 권한이 충족됐다고 결론 내리지 않는다. 이 내용은 적용·검증한 사실과 향후 절차를 구별하기 위해 명시한다.
+**[실제 정책 검증 범위]** 관리자 계정에서 `B31PracticePolicy`의 **전체 JSON을 확인했다.** 36개 Action 항목에 `ec2:Describe*`, `ec2:RunInstances`, `ec2:TerminateInstances`, VPC·라우트·보안 그룹 생성/삭제가 포함되고, `Resource: "*"`, `aws:RequestedRegion: ap-northeast-2` 조건이 적용된다. 실습 서비스와 리전은 한정하지만 개별 EC2·VPC 한 개에 한정하는 정책은 아니다. [원문 분석](iam-policy-json-review-2026-11-22.md). **정책 연결된 엔터티와 다른 정책의 영향을 합친 실효 권한은 별도 확인**이 필요하다.
 
 ## 4. 장애 발생 시 점검 순서: 라우팅 → 보안 그룹 → IP → 서버 → Docker/브라우저 — #14
 
@@ -139,7 +139,7 @@ Docker b31-docker · nginx:alpine · 컨테이너 :80
 | 호스트와 Docker 활성, HTTP 200, HTTPS `/health` 200 | **실제 명령어 출력 확인** |
 | 443 HTTPS 인증서 유효 | **Certbot 출력 확인** |
 | `iam:ListPolicies` 권한 거부 | **실제 AWS 콘솔에서 확인** |
-| `B31PracticePolicy` 전체 허용 Action / 제약 | **관리자 계정에서 확인 전** |
+| `B31PracticePolicy` 전체 JSON·Action / 리전 조건 | **관리자 콘솔에서 전체 JSON 확인 완료**: [정책 원문과 권한 범위](iam-policy-json-review-2026-11-22.md); 실제 사용자 연결 여부 추가 확인 |
 | ALB·WAF·CloudFront·요청 제한 도입 | **제안 단계, 미적용** |
 | 실제 자원 이름 규칙 | **`b31-` 공통 접두어 적용 및 README에 실제 자원별 이름 표 작성** |
 | 별도 사용자 정의 `Project` 태그 적용 | **사용자 지시로 보류**. 표시 이름과 별도 관리용 태그를 구별함 |
