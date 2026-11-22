@@ -1,14 +1,27 @@
-# 트러블슈팅 기록
+# B3-1 실제 트러블슈팅 보고서 — Chrome HTTP 접속 지연
 
-AWS 실습에서 발생한 오류 1건을 관찰한 내용과 실행 결과를 바탕으로 채웁니다.
+- 일자: 2026-11-22 KST
+- 대상: 서울 리전 EC2 `b31-web`, 공인 IPv4 `43.202.56.199`
+- 브라우저: Android 16의 Chrome 157.0.8103.50
+- 외부 접속 방식: `http://43.202.56.199/`
 
-| 항목 | 실제 실습 기록 |
+| 항목 | 실습에서 확인한 내용 |
 | --- | --- |
-| 증상 | 실패한 동작, 접속 위치, 오류 메시지나 응답 코드 |
-| 가설 | 어느 설정이 원인이라고 판단했는지와 그 이유 |
-| 검증 | 실행한 명령이나 콘솔에서 확인한 설정, 확인한 결과 |
-| 조치 | 수정한 설정과 변경 전후의 값 |
-| 결과 | 같은 동작을 다시 실행한 결과와 캡처 |
-| 재발 방지 | 다음에 같은 작업을 할 때 확인할 설정 |
+| 증상 | EC2에서 `curl -I http://127.0.0.1`은 HTTP 200이었으나 Chrome에서 공인 IP 접속 시 `ERR_TIMED_OUT` 발생. 같은 주소의 HTTP 페이지가 삼성 인터넷에서는 표시됨. |
+| 가설 | Chrome이 HTTP 대신 HTTPS(443번) 연결을 먼저 시도하여, HTTPS가 구성되지 않은 서버에 연결하지 못하는 것으로 추정. |
+| 검증 | Chrome `chrome://net-export/`에서 JSON 로그를 수집. 목적지가 `https://43.202.56.199/`, 접속 포트가 **443**이고 `ERR_CONNECTION_ABORTED (-103)`가 관찰됨. HSTS 업그레이드 여부는 `should_upgrade_to_ssl:false`로 기록됨. EC2 Nginx HTTP 응답과 삼성 인터넷 외부 접속은 정상. |
+| 조치 | Chrome 실험 기능 `HTTPS Upgrades Typed Schemeless Navigation No Timeout Fallback`을 `Disabled`로 변경하고 Chrome을 재시작함. 이 기능은 HTTPS 연결 시간 초과 시 HTTP 재시도를 제한하는 설정과 관련됨. |
+| 결과 | Chrome에서 `http://43.202.56.199/`의 Nginx 기본 페이지가 정상 표시됨. 이후 B1-1 포트폴리오를 배포해 외부 접속에 성공함. |
+| 재발 방지 | 웹 서버의 HTTP/HTTPS 지원 포트, 보안 그룹 허용 포트, 실제 브라우저 요청 스킴을 먼저 구분함. 공개 서비스는 도메인·TLS 인증서 기반 HTTPS 구성을 검토함. 브라우저 실험 기능은 실습 종료 후 기본값 복구를 고려함. |
 
-외부 HTTP에 접속이 안 되면 EC2 안에서 `curl -I http://localhost`를 먼저 실행합니다. 내부에서 200이 나오면 외부 요청에 필요한 퍼블릭 IPv4, 보안 그룹의 HTTP 규칙, 서브넷의 라우팅 경로를 확인합니다. Docker 전환 뒤 502가 나오면 `curl -I http://127.0.0.1:8080`으로 컨테이너 응답을 확인합니다.
+## 보조 검증 — Docker 보너스
+
+- `sudo docker ps`에서 `b31-docker` 컨테이너 `Up` 확인
+- `curl -I http://localhost:8080` → `HTTP/1.1 200 OK`, Docker 내부 Nginx 응답
+- 호스트 Nginx 리버스 프록시 적용 후 `curl -I http://localhost` → `200 OK`
+- `sudo docker logs --tail 10 b31-docker`에서 `GET /`, CSS, JS, SVG, `HEAD /`의 200 응답 확인
+- `GET /favicon.ico`는 404였음. 브라우저 탭 아이콘 요청으로, 웹페이지 본문 정상 작동 여부와 별개임.
+
+**증빙 상태:** 실제 Chrome 오류/성공 화면과 터미널 로그 캡처는 대화에서 확인했으나 GitHub의 `docs/evidence/`에는 아직 업로드되지 않았습니다.
+
+**분석 범위:** 로그는 HTTPS 요청 및 연결 오류를 입증합니다. HTTPS를 선택한 Chrome 내부의 정확한 조건은 이 기록만으로 단정하지 않습니다.
