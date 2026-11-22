@@ -342,6 +342,7 @@ ok
 
 - [실제 AWS 구성도 최종 PNG](docs/architecture.png) — 퍼블릭 서브넷·라우팅 테이블·보안 그룹·EC2·Docker·HTTPS를 실제 값으로 표현
 - [**Docker ps Up 실제 터미널 화면**](docs/evidence/docker_ps_actual_redacted.png) — 실제 사용자 캡처에서 알림·계정 상단 부분을 제외한 크롭본
+- [**방식 A: 공인 IPv4의 실제 HTTP 브라우저 화면**](docs/evidence/portfolio-http-public-ip-live.png) — GitHub Actions Chrome에서 `http://43.202.56.199/`로 직접 접속해 2026-11-22 촬영하고 화면 확인. 자동 HTTP 200 기록과 함께 제출 가능
 - [외부 HTTPS 포트폴리오 화면](docs/evidence/portfolio-https-live.png) — GitHub Actions 브라우저가 실제 운영 웹사이트에 접속해 2026-11-22 촬영한 **새 스크린샷**. 한국어 정상 렌더링 확인
 - [외부 HTTPS /health 화면](docs/evidence/health-https-live.png) — 실제 브라우저의 `ok` 표시
 - [외부 HTTP/HTTPS 응답 텍스트](docs/evidence/automated-external-check.txt) — IP HTTP, 도메인 HTTPS, /health 각 200 및 본문 ok 확인
