@@ -14,6 +14,10 @@
 
 실제 외부 재확인 코드는 [capture-external-proof.yml](../../.github/workflows/capture-external-proof.yml)입니다. 브라우저 캡처에는 주소 표시줄이 없으므로 **URL의 정확한 텍스트 및 HTTP 상태**는 [automated-external-check.txt](automated-external-check.txt)와 [README](../../README.md)에 함께 표시했습니다.
 
+## 설명과 사진을 함께 보는 문서
+
+[**실제 스크린샷을 설명 아래에 배치한 시각 증빙 문서**](visual-guide.md)를 열면 AWS 아키텍처, Docker 실행, 외부 HTTPS 포트폴리오, `/health`를 순서대로 확인할 수 있습니다. 사진이 없는 AWS 콘솔 원본·접속 오류 화면은 없는 그대로 표시하고, 검증된 문자 기록에 연결했습니다.
+
 ## 항목별 남은 원본 사진과 텍스트 증빙
 
 아래 표는 **새로 올릴 필요가 있는 모든 파일의 목록이 아니라, 원본 사진 종류와 현재 입증 경로를 대조**한 것입니다. AI 사전평가용 텍스트 근거와 과제 자체의 이미지 제출 요구사항은 서로 구분합니다.
