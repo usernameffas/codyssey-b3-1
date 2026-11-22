@@ -166,7 +166,7 @@ Access denied: no identity-based policy allows the action
 | VPC | `b31-vpc`, `10.10.0.0/16` |
 | 서브넷 | `b31-subnet-public1-ap-northeast-2a` (퍼블릭) |
 | 라우팅 | `10.10.0.0/16 → local`; `0.0.0.0/0 → b31-igw (igw-09322346b5d9055a8)` (퍼블릭 서브넷에 라우트 테이블 명시 연결) |
-| 보안 그룹 | **`b31-web-sg` (`sg-04bc2bb098cb7bbd1`)**, HTTP TCP 80 / HTTPS TCP 443을 `0.0.0.0/0`에 공개, SSH TCP 22는 직접 SSH용 `/32` 및 EC2 Instance Connect 전용 접속원 범위로 제한. **정확한 EIC 허용 CIDR은 추후 보안 그룹 화면에서 재확인** |
+| 보안 그룹 | **`b31-web-sg` (`sg-04bc2bb098cb7bbd1`)**, HTTP TCP 80 / HTTPS TCP 443을 `0.0.0.0/0`에 공개, SSH TCP 22는 직접 SSH용 `/32` 및 EC2 Instance Connect 전용 접속원 범위로 제한. **직접 SSH의 출처는 단일 IPv4 /32, EIC 출처는 AWS 관리형 접두사 목록으로 확인**. 공개 문서에서 개인 공인 IP는 가리고, 관리형 접두사 목록의 전체 ID는 추후 확인 |
 | IAM | 실습용 `b31-learner`, `B31PracticePolicy` 등 제한 권한 |
 | EC2 | `b31-web`, `i-07336ff478ba4ef67`, `t3.micro` |
 | 운영체제 / 디스크 | Ubuntu 24.04 LTS / EBS gp3 8 GiB |
@@ -191,6 +191,16 @@ Access denied: no identity-based policy allows the action
 - **실제 확인**: AWS 콘솔에서 VPC·퍼블릭 서브넷·라우팅 테이블 이름과 연결을 확인했고, EC2·보안 그룹 이름은 기존 설정 및 실습 기록에 남았습니다.
 - **태그의 구별**: AWS의 표시 이름은 많은 EC2/VPC 리소스에서 `Name` 태그로 구현되지만, **모든 리소스에 별도의 `Project=CODYSSEY-B3-1` 같은 사용자 정의 태그를 일괄 적용한 기록은 없습니다.** 과제별 구분은 실제 `b31-` 이름 규칙으로 수행했습니다.
 - **미완료를 정확하게 표시**: 개별 리소스의 전체 태그 목록과 신규 태그의 일괄 적용 여부는 확인 전이며, 태그 추가는 사용자 요청에 따라 보류했습니다.
+
+## SSH 인바운드 출처 구분과 비공개 정보
+
+- **실제 보안 그룹:** `b31-web-sg` (`sg-04bc2bb098cb7bbd1`)
+- **SSH 22번 직접 접속:** 특정 공인 IPv4 주소 **한 개**만 허용하는 `/32` 규칙. **개인 공인 IP의 전체 숫자는 공개 GitHub에 게시하지 않음**.
+- **SSH 22번 EC2 Instance Connect 접속:** AWS 관리형 접두사 목록에 해당하는 전용 출처를 규칙에 사용.
+- **HTTP 80 / HTTPS 443:** 공개 웹사이트용으로 IPv4 전체 `0.0.0.0/0` 허용.
+- **추가 확인할 식별자:** 관리형 접두사 목록의 `pl-...` 전체 ID는 기존 화면 기록에 온전하게 남아 있지 않아 추정하지 않음.
+
+[**실제 SSH 출처·리슨·IAM의 차이와 공개 범위 검증 보고서**](docs/ssh-security-verification-2026-11-22.md)
 
 ## 외부 접속과 접근 제어 — 네트워크 계층 구분
 
