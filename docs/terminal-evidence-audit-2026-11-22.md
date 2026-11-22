@@ -155,7 +155,7 @@ Reason: no identity-based policy allows the action
 |---|---|---|
 | #1 VPC·서브넷·IGW 경로 | 본 문서 1절, [네트워크 콘솔 확인](network-console-verification-2026-11-22.md) | IGW 전체 ID 확인 완료; 부착 상태(Attached) 화면은 필요시 별도 검증 가능 |
 | #2 SSH와 호스트 HTTP 200 | 본 문서 2·3절 및 [실제 터미널 네트워크 전체 경로/수신 주소](network-terminal-verification-2026-11-22.md) | AWS SG의 정확한 SSH 인바운드 CIDR은 별도 확인 필요 |
-| #3 보안 그룹 HTTP 80·SSH 22 | README 구성표 | 평가 당시 PASS. 세부 규칙 원문은 추가 확인 가능 |
+| #3 보안 그룹 HTTP 80·SSH 22 | README 구성표, [실제 SSH 단일 IP /32와 관리형 EIC 출처 설명](ssh-security-verification-2026-11-22.md) | 기존 평가 PASS. 개인 IP 공개는 피하고 EIC 목록 전체 ID는 추가 조회 전 |
 | **#4 외부 접속 방식 A 또는 /health** | 본 문서 3·4절, README의 접속 URL | **이 항목은 이전 보완표에서 SSH로 잘못 분류했으므로 정정** |
 | #5 리소스 정리 및 삭제 증빙 | [cleanup-checklist.md](cleanup-checklist.md) | **사용자 요청으로 삭제 보류**, 완료로 표기하지 않음 |
 | #9 자원 태그·이름 규칙 | [README 실제 이름 규칙](../README.md) | `b31-` 접두어로 리소스 식별, 별도 사용자 정의 태그 추가는 보류 |
