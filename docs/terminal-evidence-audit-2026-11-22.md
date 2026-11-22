@@ -40,20 +40,25 @@ ip -4 route
 sudo ss -lntp | grep -E ':(22|80|443|8080)\b'
 ```
 
-화면에서 확인된 주요 출력 발췌:
+화면에서 확인된 네트워크 출력의 IP 경로와 수신 포트 주소·프로세스별 확인표 (2026-11-22 20:19 화면과 대조함):
 
 ```text
 inet 10.10.4.1/20 brd 10.10.15.255 scope global dynamic ens5
 default via 10.10.0.1 dev ens5 proto dhcp src 10.10.4.1 metric 100
 10.10.0.0/20 dev ens5 proto kernel scope link src 10.10.4.1 metric 100
+10.10.0.1 dev ens5 proto dhcp scope link src 10.10.4.1 metric 100
+10.10.0.2 dev ens5 proto dhcp scope link src 10.10.4.1 metric 100
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1
 
-LISTEN ... 0.0.0.0:80   ... nginx ...
-LISTEN ... 0.0.0.0:22   ... sshd ...
-LISTEN ... 0.0.0.0:8080 ... docker-proxy ...
-LISTEN ... 0.0.0.0:443  ... nginx ...
+IPv4 0.0.0.0:80   nginx
+IPv4 0.0.0.0:22   sshd, systemd
+IPv4 0.0.0.0:8080 docker-proxy
+IPv4 0.0.0.0:443  nginx
+IPv6 [::]:22      sshd, systemd
+IPv6 [::]:8080    docker-proxy
 ```
 
-> `LISTEN` 행은 `ss` 원본에서 확인되는 주소·프로세스를 발췌한 축약 형태이며 완전한 원문 행이 아니다. Ubuntu의 `10.10.4.1/20`은 EC2 NIC의 주소/프리픽스이고, AWS VPC의 `10.10.0.0/16`과 쓰임이 다르다. 앞의 리눅스 `default via 10.10.0.1`과 AWS 콘솔의 `0.0.0.0/0 → IGW`도 서로 다른 라우팅 계층의 기록이다.
+> `LISTEN` 항목은 실제 화면의 주소·프로세스를 행별로 정리한 것이며 긴 `ss` 원문 행 그대로 복사한 문자열은 아니다. [네트워크 검증의 실제 화면 전사와 원본 파일 미확인 상태](network-terminal-verification-2026-11-22.md)를 참고한다. Ubuntu의 `10.10.4.1/20`은 EC2 NIC의 주소/프리픽스이고, AWS VPC의 `10.10.0.0/16`과 쓰임이 다르다. 앞의 리눅스 `default via 10.10.0.1`과 AWS 콘솔의 `0.0.0.0/0 → IGW`도 서로 다른 라우팅 계층의 기록이다.
 
 ## 3. Nginx와 Docker — 실제 종합 테스트 (19:16 KST)
 
@@ -149,7 +154,7 @@ Reason: no identity-based policy allows the action
 | 평가 항목 | 근거와 위치 | 현재 남은 부분 |
 |---|---|---|
 | #1 VPC·서브넷·IGW 경로 | 본 문서 1절, [네트워크 콘솔 확인](network-console-verification-2026-11-22.md) | IGW 전체 ID 및 별도 Attach 화면은 추가 확인 가능 |
-| #2 SSH와 호스트 HTTP 200 | 본 문서 2·3절 | 필요하면 EIC 접속 전 과정의 원본 캡처를 비공개 기록으로 보완 |
+| #2 SSH와 호스트 HTTP 200 | 본 문서 2·3절 및 [실제 터미널 네트워크 전체 경로/수신 주소](network-terminal-verification-2026-11-22.md) | AWS SG의 정확한 SSH 인바운드 CIDR은 별도 확인 필요 |
 | #3 보안 그룹 HTTP 80·SSH 22 | README 구성표 | 평가 당시 PASS. 세부 규칙 원문은 추가 확인 가능 |
 | **#4 외부 접속 방식 A 또는 /health** | 본 문서 3·4절, README의 접속 URL | **이 항목은 이전 보완표에서 SSH로 잘못 분류했으므로 정정** |
 | #5 리소스 정리 및 삭제 증빙 | [cleanup-checklist.md](cleanup-checklist.md) | **사용자 요청으로 삭제 보류**, 완료로 표기하지 않음 |
