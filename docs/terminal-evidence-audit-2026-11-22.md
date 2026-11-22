@@ -23,10 +23,10 @@ Explicit subnet association:
 
 Routes:
   Destination 10.10.0.0/16 -> Target local -> Active
-  Destination 0.0.0.0/0   -> Target Internet Gateway -> Active
+  Destination 0.0.0.0/0   -> Target Internet Gateway b31-igw (igw-09322346b5d9055a8) -> Active
 ```
 
-위 블록은 **콘솔 표의 값을 텍스트로 정리**한 것으로 CLI 출력이라고 주장하지 않는다. Internet Gateway의 **전체 ID는 모바일 화면에서 생략되어 미확인**이다. 더 자세한 설명은 [network-console-verification-2026-11-22.md](network-console-verification-2026-11-22.md).
+위 블록은 **콘솔 표의 값을 텍스트로 정리**한 것으로 CLI 출력이라고 주장하지 않는다. Internet Gateway는 **20:24 KST 추가 VPC 콘솔 목록에서 전체 ID `igw-09322346b5d9055a8`과 표시 이름 `b31-igw`를 확인**했다. 라우트 활성은 19:29 KST 라우팅 테이블 화면에서 별도로 확인한 것이다. 더 자세한 설명은 [network-console-verification-2026-11-22.md](network-console-verification-2026-11-22.md).
 
 ## 2. 원격 SSH 및 Ubuntu — 실제 연결 확인 (19:19 KST)
 
@@ -153,7 +153,7 @@ Reason: no identity-based policy allows the action
 
 | 평가 항목 | 근거와 위치 | 현재 남은 부분 |
 |---|---|---|
-| #1 VPC·서브넷·IGW 경로 | 본 문서 1절, [네트워크 콘솔 확인](network-console-verification-2026-11-22.md) | IGW 전체 ID 및 별도 Attach 화면은 추가 확인 가능 |
+| #1 VPC·서브넷·IGW 경로 | 본 문서 1절, [네트워크 콘솔 확인](network-console-verification-2026-11-22.md) | IGW 전체 ID 확인 완료; 부착 상태(Attached) 화면은 필요시 별도 검증 가능 |
 | #2 SSH와 호스트 HTTP 200 | 본 문서 2·3절 및 [실제 터미널 네트워크 전체 경로/수신 주소](network-terminal-verification-2026-11-22.md) | AWS SG의 정확한 SSH 인바운드 CIDR은 별도 확인 필요 |
 | #3 보안 그룹 HTTP 80·SSH 22 | README 구성표 | 평가 당시 PASS. 세부 규칙 원문은 추가 확인 가능 |
 | **#4 외부 접속 방식 A 또는 /health** | 본 문서 3·4절, README의 접속 URL | **이 항목은 이전 보완표에서 SSH로 잘못 분류했으므로 정정** |
