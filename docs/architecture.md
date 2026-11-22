@@ -8,7 +8,8 @@
                             |
                           Internet
                             |
-                   Internet Gateway
+                   Internet Gateway (b31-igw)
+                    igw-09322346b5d9055a8
                             |
             VPC: b31-vpc (10.10.0.0/16)
                             |
@@ -47,5 +48,6 @@
 - 외부 HTTP 접속은 실제로 검증했습니다.
 - HTTPS 443번을 보안 그룹에서 열고 Let's Encrypt 인증서를 발급해 호스트 Nginx에 적용했습니다. Certbot 성공 출력 및 포트폴리오 브라우저 표시를 확인했습니다.
 - 이 네트워크 구성은 **사용자 지시에 따라 삭제 보류 중**이며, 실습 종료 후 승인된 때에만 정리합니다.
+- 인터넷 게이트웨이 전체 ID는 `igw-09322346b5d9055a8` (`b31-igw`)이며, 2026-11-22 20:24 KST 서울 리전 콘솔 목록에서 확인했습니다.
 - 실제 확인한 라우팅 테이블 ID는 `rtb-00e3c2f405b2e1ea0`, 퍼블릭 서브넷 ID는 `subnet-0814ca163de8b1b5f`, 보안 그룹 ID는 `sg-04bc2bb098cb7bbd1`입니다.
 - PNG 생성은 `.github/workflows/render-architecture.yml`의 GitHub Actions에서 실제 SVG를 렌더링해 `docs/architecture.png`로 커밋했습니다.
