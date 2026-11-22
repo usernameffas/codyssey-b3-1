@@ -43,9 +43,12 @@ jobs:
           set -euo pipefail
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           echo "Capturing with: $CHROME"
+          # A 방식의 정확한 평가 조건: 공인 IPv4로 HTTP 브라우저 접속 후 실제 포트폴리오 촬영
+          timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --lang=ko-KR --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/portfolio-http-public-ip-live.png 'http://43.202.56.199/'
           timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --lang=ko-KR --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/portfolio-https-live.png 'https://codyssey-b31-web.duckdns.org/'
           timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/health-https-live.png 'https://codyssey-b31-web.duckdns.org/health'
-          file docs/evidence/portfolio-https-live.png docs/evidence/health-https-live.png
+          file docs/evidence/portfolio-http-public-ip-live.png docs/evidence/portfolio-https-live.png docs/evidence/health-https-live.png
+          test -s docs/evidence/portfolio-http-public-ip-live.png
           test -s docs/evidence/portfolio-https-live.png
           test -s docs/evidence/health-https-live.png
 
@@ -54,7 +57,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/evidence/portfolio-https-live.png docs/evidence/health-https-live.png docs/evidence/automated-external-check.txt
+          git add docs/evidence/portfolio-http-public-ip-live.png docs/evidence/portfolio-https-live.png docs/evidence/health-https-live.png docs/evidence/automated-external-check.txt
           if git diff --cached --quiet; then
             echo "No external evidence changes."
           else
