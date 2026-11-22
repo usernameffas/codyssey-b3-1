@@ -25,7 +25,7 @@ text { font-family: "DejaVu Sans", Arial, sans-serif; fill: #14243B; }
 <path d="M700 250 V296" class="line"/>
 <rect x="460" y="296" width="480" height="84" rx="13" class="card"/>
 <text x="700" y="329" text-anchor="middle" class="h2">Internet Gateway</text>
-<text x="700" y="359" text-anchor="middle" class="small">Public route destination: 0.0.0.0/0</text>
+<text x="700" y="359" text-anchor="middle" class="small">b31-igw  |  igw-09322346b5d9055a8</text>
 <path d="M700 380 V429" class="line"/>
 <rect x="64" y="429" width="1272" height="670" rx="24" fill="#F4F8FF" stroke="#5A7DAD" stroke-width="3"/>
 <text x="100" y="480" class="h2">VPC: b31-vpc  |  10.10.0.0/16</text>
