@@ -90,7 +90,7 @@ Access denied: no identity-based policy allows the action
 - 이 숫자는 **GitHub 근거 자료에 대한 평가 결과**입니다. 실제로 실행하여 확인한 작업과 문서·화면으로 증명하지 못한 작업은 구별합니다.
 - [16개 항목의 판정 사유 및 보완 대상](docs/assessment-review.md)
 - [증빙 파일별 목록과 업로드 상태](docs/evidence/README.md)
-- [최신 서버·Docker·HTTPS 구성도 SVG](docs/architecture-current.svg) — 기존 `docs/architecture.png`는 초기 초안이므로 제출할 PNG는 실제 값으로 교체해야 함
+- [**최종 AWS 구성도 PNG**](docs/architecture.png) — 2026-11-22 실제 EC2·VPC·서브넷·라우팅 테이블·보안 그룹·Docker·HTTPS 확인값 반영, GitHub에서 PNG 생성·교체 완료. [편집 원본 SVG](docs/architecture-current.svg)
 - **리소스 삭제는 사용자 요청으로 보류**되어 있으며 완료로 표기하지 않습니다.
 
 ## 최신 서버 종합 검증 — 7개 항목 완료 (2026-11-22 19:16 KST)
@@ -223,7 +223,7 @@ sudo docker logs --tail 10 b31-docker
 
 | PDF 요구사항 | 위치 | 상태 |
 | --- | --- | --- |
-| 아키텍처 다이어그램 PNG/PDF 1장 | [docs/architecture.png](docs/architecture.png) | **기존 파일은 초안**; 실제 구성도를 별도 생성·제공, GitHub 이미지 교체는 남음 |
+| 아키텍처 다이어그램 PNG/PDF 1장 | [**docs/architecture.png**](docs/architecture.png) | **최종 PNG 업데이트 완료** — 실제 설정·라우팅·Nginx·Docker·HTTPS 반영. 편집용 [SVG](docs/architecture-current.svg) 동시 보존 |
 | 웹 서비스 외부 접속 방법·주소·캡처 | 이 README 및 `docs/evidence/` | **접속 확인 완료 / GitHub 캡처 업로드 필요** |
 | 트러블슈팅 보고서 (최소 1건) | [docs/troubleshooting.md](docs/troubleshooting.md) | **실제 기록 작성** |
 | 리소스 정리 체크리스트 | [docs/cleanup-checklist.md](docs/cleanup-checklist.md) | **정리 절차 기록 / 삭제 아직 미진행** |
