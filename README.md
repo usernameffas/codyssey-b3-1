@@ -39,7 +39,7 @@ $ sudo ss -lntp | grep -E ':(22|80|443|8080)\b'
 
 SSH는 휴대전화 브라우저에서 **EC2 Instance Connect → Ubuntu `ubuntu` 계정**으로 접속했습니다. `ip -4 route` 결과는 **Ubuntu 내부 네트워크 라우트**, `0.0.0.0/0 → IGW`는 **AWS VPC 라우팅 테이블**의 경로입니다.
 
-**실행 서비스·Docker·HTTP·HTTPS·인증서** (19:16 KST, 발췌):
+**실행 서비스·Docker·HTTP·HTTPS·인증서** (19:16 KST 저장된 출력, 20:14 KST `cat`으로 재확인):
 
 ```console
 $ sudo systemctl is-active nginx docker
@@ -47,15 +47,22 @@ active
 active
 
 $ sudo docker ps
-[발췌] b31-docker / nginx:alpine / Up 2 hours / 0.0.0.0:8080->80/tcp
+IMAGE: nginx:alpine
+STATUS: Up 2 hours
+PORTS: 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+NAMES: b31-docker
 
 $ curl -I --max-time 10 http://localhost:8080/
 HTTP/1.1 200 OK
+Server: nginx/1.31.9
+Content-Type: text/html
 Content-Length: 10227
 
 $ curl -I --max-time 10 http://localhost/
 HTTP/1.1 200 OK
 Server: nginx/1.24.0 (Ubuntu)
+Content-Type: text/html
+Content-Length: 10227
 
 $ curl -i --max-time 10 https://codyssey-b31-web.duckdns.org/health
 HTTP/1.1 200 OK
@@ -82,7 +89,7 @@ Action: iam:ListPolicies
 Access denied: no identity-based policy allows the action
 ```
 
-위 출력은 **서버 실행·접근 제한의 실제 확인값**입니다. 정책의 전체 JSON, IGW의 전체 ID, 최종 삭제 증빙 등 **미확인 정보는 만들어서 추가하지 않았습니다.** 평가 항목 #4는 **외부 접속 방식 A 또는 `/health` 호출**에 관한 항목이며, 그 결과는 위의 HTTPS `200 OK`와 외부 브라우저 `ok` 표시로 확인했습니다.
+위 출력은 **서버 실행·접근 제한의 실제 확인값**입니다. Docker 표는 실제 `docker ps` 화면의 줄바꿈을 필드별로 재배열했으며, **[저장된 7항목 검증 결과 재확인과 HTTP 헤더 전문](docs/validation-2026-11-22.md)**을 별도로 기록했습니다. 정책의 전체 JSON, IGW의 전체 ID, 최종 삭제 증빙 등 **미확인 정보는 만들어서 추가하지 않았습니다.** 평가 항목 #4는 **외부 접속 방식 A 또는 `/health` 호출**에 관한 항목이며, 그 결과는 위의 HTTPS `200 OK`와 외부 브라우저 `ok` 표시로 확인했습니다.
 
 ## AI 사전평가 확인 (2026-11-22)
 
