@@ -21,7 +21,7 @@ Main: No
 Explicit association: b31-subnet-public1-ap-northeast-2a
 Subnet ID: subnet-0814ca163de8b1b5f
 10.10.0.0/16 -> local -> Active
-0.0.0.0/0 -> Internet Gateway -> Active
+0.0.0.0/0 -> b31-igw (igw-09322346b5d9055a8) -> Active
 ```
 
 **Ubuntu 네트워크·SSH 및 수신 포트** (19:19 KST, 발췌):
@@ -100,7 +100,7 @@ Action: iam:ListPolicies
 Access denied: no identity-based policy allows the action
 ```
 
-위 출력은 **서버 실행·접근 제한의 실제 확인값**입니다. Docker 표는 실제 `docker ps` 화면의 줄바꿈을 필드별로 재배열했으며, **[저장된 7항목 검증 결과 재확인과 HTTP 헤더 전문](docs/validation-2026-11-22.md)**을 별도로 기록했습니다. 정책의 전체 JSON, IGW의 전체 ID, 최종 삭제 증빙 등 **미확인 정보는 만들어서 추가하지 않았습니다.** 평가 항목 #4는 **외부 접속 방식 A 또는 `/health` 호출**에 관한 항목이며, 그 결과는 위의 HTTPS `200 OK`와 외부 브라우저 `ok` 표시로 확인했습니다.
+위 출력은 **서버 실행·접근 제한의 실제 확인값**입니다. Docker 표는 실제 `docker ps` 화면의 줄바꿈을 필드별로 재배열했으며, **[저장된 7항목 검증 결과 재확인과 HTTP 헤더 전문](docs/validation-2026-11-22.md)**을 별도로 기록했습니다. 정책의 전체 JSON과 최종 삭제 증빙 등 **미확인 정보는 만들어서 추가하지 않았습니다.** IGW의 전체 ID는 20:24 KST AWS 콘솔에서 확인해 기록했습니다. 평가 항목 #4는 **외부 접속 방식 A 또는 `/health` 호출**에 관한 항목이며, 그 결과는 위의 HTTPS `200 OK`와 외부 브라우저 `ok` 표시로 확인했습니다.
 
 ## AI 사전평가 확인 (2026-11-22)
 
@@ -132,7 +132,7 @@ Access denied: no identity-based policy allows the action
 - 라우팅 테이블: `b31-rtb-public` (`rtb-00e3c2f405b2e1ea0`), **기본 테이블 아님**
 - 명시적 연결: `b31-subnet-public1-ap-northeast-2a` (`subnet-0814ca163de8b1b5f`)
 - 라우팅: `10.10.0.0/16 → local` / `0.0.0.0/0 → Internet Gateway`; **두 항목 모두 활성**
-- IGW ID 뒷자리는 모바일 화면에서 생략되어 추정하지 않았습니다.
+- 인터넷 게이트웨이: **`b31-igw` (`igw-09322346b5d9055a8`)** — 2026-11-22 20:24 KST 서울 리전 AWS VPC 콘솔의 인터넷 게이트웨이 목록에서 전체 ID 확인.
 - 개인 알림·계정 관련 정보가 표시된 원본 화면은 공개 저장소에 게시하지 않고 텍스트 검증값만 기록했습니다.
 
 ## IAM 실습 계정의 실제 권한 거부 검증 (2026-11-22 19:32 KST)
@@ -165,7 +165,7 @@ Access denied: no identity-based policy allows the action
 | 리전 | 서울 `ap-northeast-2` |
 | VPC | `b31-vpc`, `10.10.0.0/16` |
 | 서브넷 | `b31-subnet-public1-ap-northeast-2a` (퍼블릭) |
-| 라우팅 | `10.10.0.0/16 → local`; `0.0.0.0/0 → Internet Gateway` (퍼블릭 서브넷에 라우트 테이블 명시 연결) |
+| 라우팅 | `10.10.0.0/16 → local`; `0.0.0.0/0 → b31-igw (igw-09322346b5d9055a8)` (퍼블릭 서브넷에 라우트 테이블 명시 연결) |
 | 보안 그룹 | **`b31-web-sg` (`sg-04bc2bb098cb7bbd1`)**, HTTP TCP 80 / HTTPS TCP 443을 `0.0.0.0/0`에 공개, SSH TCP 22는 직접 SSH용 `/32` 및 EC2 Instance Connect 전용 접속원 범위로 제한. **정확한 EIC 허용 CIDR은 추후 보안 그룹 화면에서 재확인** |
 | IAM | 실습용 `b31-learner`, `B31PracticePolicy` 등 제한 권한 |
 | EC2 | `b31-web`, `i-07336ff478ba4ef67`, `t3.micro` |
@@ -183,7 +183,7 @@ Access denied: no identity-based policy allows the action
 |---|---|---|
 | VPC | `b31-vpc` | 사설 네트워크 범위 `10.10.0.0/16` |
 | Public Subnet | `b31-subnet-public1-ap-northeast-2a` | EC2가 있는 서울 `2a` 가용 영역의 퍼블릭 서브넷 |
-| Route Table | `b31-rtb-public` | `10.10.0.0/16 → local`, `0.0.0.0/0 → IGW` |
+| Route Table | `b31-rtb-public` | `10.10.0.0/16 → local`, `0.0.0.0/0 → b31-igw (igw-09322346b5d9055a8)` |
 | Security Group | `b31-web-sg` | 웹 80/443, SSH 22 접근 제어 |
 | EC2 Instance | `b31-web` | Ubuntu 웹 서버 및 Docker 배포 |
 
