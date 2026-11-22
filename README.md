@@ -32,10 +32,21 @@ inet 10.10.4.1/20 brd 10.10.15.255 scope global dynamic ens5
 
 $ ip -4 route
 default via 10.10.0.1 dev ens5 proto dhcp src 10.10.4.1 metric 100
+10.10.0.0/20 dev ens5 proto kernel scope link src 10.10.4.1 metric 100
+10.10.0.1 dev ens5 proto dhcp scope link src 10.10.4.1 metric 100
+10.10.0.2 dev ens5 proto dhcp scope link src 10.10.4.1 metric 100
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1
 
 $ sudo ss -lntp | grep -E ':(22|80|443|8080)\b'
-[발췌] sshd :22 / nginx :80, :443 / docker-proxy :8080
+IPv4 0.0.0.0:80   nginx
+IPv4 0.0.0.0:22   sshd, systemd
+IPv4 0.0.0.0:8080 docker-proxy
+IPv4 0.0.0.0:443  nginx
+IPv6 [::]:22      sshd, systemd
+IPv6 [::]:8080    docker-proxy
 ```
+
+**[실제 EC2 네트워크 출력 확인표(2026-11-22 20:19)](docs/network-terminal-verification-2026-11-22.md)**에서 경로 전체와 프로그램별 LISTEN 주소를 기록했습니다. `ss` 출력은 모바일 화면에서 행이 줄바꿈돼 **필드별로 정리한 값**입니다. 20:19 당시 `cat` 명령은 중복 입력으로 오류가 났으므로 파일의 재열람 성공으로 표현하지 않습니다.
 
 SSH는 휴대전화 브라우저에서 **EC2 Instance Connect → Ubuntu `ubuntu` 계정**으로 접속했습니다. `ip -4 route` 결과는 **Ubuntu 내부 네트워크 라우트**, `0.0.0.0/0 → IGW`는 **AWS VPC 라우팅 테이블**의 경로입니다.
 
