@@ -75,7 +75,10 @@ active
 active
 
 $ sudo docker ps
-[일부 생략] nginx:alpine ... b31-docker ... Up 2 hours ... 0.0.0.0:8080->80/tcp ...
+IMAGE: nginx:alpine
+STATUS: Up 2 hours
+PORTS: 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+NAMES: b31-docker
 
 $ curl -I --max-time 10 http://localhost:8080/
 HTTP/1.1 200 OK
@@ -95,7 +98,7 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 - 실제 Docker 실행 명령 기록: `sudo docker run -d --name b31-docker -p 8080:80 -v /var/www/html:/usr/share/nginx/html:ro nginx:alpine`.
 - 외부 80/443 → 호스트 Nginx → `127.0.0.1:8080` → Docker Nginx.
 - 과제용 B1-1 정적 포트폴리오를 외부 모바일 브라우저에서 확인했다.
-- `sudo docker ps`의 **전체 텍스트 한 줄**은 서버의 `~/b31-validation.txt`에서 추후 복사하면 더 충실히 제출할 수 있다.
+- **20:13~20:14 KST에 `cat ~/b31-validation.txt`를 실제 실행하여 저장된 7항목 전체를 재확인**했다. Docker 표는 터미널에서 열이 줄바꿈되어 표시돼 실제 값을 필드별로 재정리했다. [실제 Docker·Nginx·HTTPS 전체 HTTP 헤더 및 TLS 검증값](validation-2026-11-22.md)에 기록했다. 서버 파일을 그대로 업로드했다는 뜻은 아니다.
 
 ## 4. HTTPS/TLS와 상태 확인 — 실제 종합 테스트 (19:03~19:16 KST)
 
