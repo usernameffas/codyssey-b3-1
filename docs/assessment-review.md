@@ -11,9 +11,9 @@
 | # | 평가 화면에서 제시한 쟁점 | 실습·문서 현황 | 보완 또는 확인 |
 |---|---|---|---|
 | 1 | VPC CIDR, local 및 0.0.0.0/0 → Internet Gateway 라우팅 | **19:29 AWS 콘솔에서 VPC ID, 퍼블릭 서브넷 명시적 연결, 활성 경로 2개 직접 확인**. [실제 값 기록](network-console-verification-2026-11-22.md) | 공개 텍스트 증빙 작성 완료. 재평가 결과는 확인 전 |
-| 2 | SSH/원격 접속 방식과 HTTP 200 응답 | EC2 Instance Connect 접속, `curl` 200, [방식 A와 네트워크 경로](assessment-explanations.md) 기록 | 원본 접속 화면 비공개 보관·공개 증빙 링크 점검 필요 |
+| 2 | SSH/원격 접속 방식과 HTTP 200 응답 | **실제 EC2 Instance Connect의 `ubuntu` 접속**, `ip -4 addr show dev ens5`, `ip -4 route`, `sudo ss -lntp`, `curl` HTTP 200을 [README와 텍스트 출력](terminal-evidence-audit-2026-11-22.md)에 기록 | SSH 허용 출처 전체 CIDR과 AWS SG 세부 규칙은 화면 재확인 시 추가 |
 | 3 | 보안 그룹 HTTP/SSH 설명 | 평가에서 PASS | 기존 근거 보존 |
-| 4 | 실제 SSH 접속 증빙 | EIC 터미널 캡처가 대화에 존재 | GitHub 증빙 폴더에 민감정보 제외하고 캡처 추가 |
+| 4 | **외부 접속 검증 방식 A(브라우저) 또는 `/health` 확인** | **실제 외부 Chrome에서 포트폴리오 표시**, `/health`에서 `HTTP/1.1 200 OK`와 `ok` 확인. [README에 직접 출력](../README.md), [검증값](terminal-evidence-audit-2026-11-22.md) 보완 | 이전 보완표에서 SSH 증빙으로 분류한 부분 정정. 원본 과제의 외부 접속 증빙 화면은 별도 제출 필요 |
 | 5 | EC2·EBS 등 리소스 정리 체크리스트 | 작성 완료, **실제 삭제는 사용자 요청으로 보류** | 삭제 완료로 허위 표기하지 않음. 승인 후 수행·완료 기록 필요 |
 | 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | 실제 VPC/서브넷/라우팅 테이블 ID와 활성 경로 확인. [최신 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) | **필수 제출 PNG/PDF는 최신 구성을 반영한 최종본인지 점검 필요** |
 | 7 | HTTPS 443·보안 그룹 설정 증빙 | 443 인바운드 규칙 추가 화면 확인 | 화면 캡처와 규칙 목적·출처 범위를 함께 정리 |
@@ -26,6 +26,13 @@
 | 14 | 오류 해결의 증상→가설→검증→조치→결과 | [실제 Chrome 오류 사례](troubleshooting.md), [라우팅→SG→IP/DNS→서버→Docker 점검 순서](assessment-explanations.md), [실행 검증](validation-2026-11-22.md) 정리 | 스크린샷 공개용 가공본 별도 업로드 필요 |
 | 15 | IAM 실제 최소 권한 검증 | `iam:ListPolicies` 실제 접근 거부 확인; [최소 권한을 단계적으로 부여하는 절차](assessment-explanations.md) 서술 | 정책 JSON·전체 허용/거부 동작은 아직 검증 전, 절차는 설계상 권고 |
 | 16 | 단일 EC2에서 ALB 확장 고려 및 운영 설명 | [CPU·메모리·오류율·지연·비용 추적 및 ALB 도입 기준](assessment-explanations.md) 작성 | ALB는 추가 비용이 드는 확장 설계로 이번에는 미설치 |
+
+## 이전 평가 화면과 현재 문서의 차이
+
+- 사전평가 **6%(1/16)**은 현재 문서 보완 이전의 결과입니다. 문서 수정만으로 점수 상승을 확인했다고 쓰지 않습니다.
+- 평가 **#4는 SSH 항목이 아니라 외부 접속 방식 A 또는 `/health`** 검증입니다. 본 표의 기존 오분류를 실제 사전평가 원본 화면을 대조해 정정했습니다.
+- [2026-11-22 명령 출력·AWS 콘솔 값의 텍스트 증빙](terminal-evidence-audit-2026-11-22.md)을 README 상단에도 삽입했습니다.
+- 공개 저장소에는 민감한 모바일 원본을 직접 올리지 않고, 비공개 Imprint 및 제출용 가공본으로 구분합니다.
 
 ## 확인된 실제 작업
 
