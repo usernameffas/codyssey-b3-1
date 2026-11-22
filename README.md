@@ -1,6 +1,6 @@
 # 코디세이 B3-1 — AWS EC2 웹사이트 배포 실습 기록
 
-> 실제 수행일: 2026-11-22 (한국시간). 진행 중인 실습이며 **리소스 정리와 증빙 업로드는 아직 완료되지 않았습니다.**
+> 실제 수행일: 2026-11-22 (한국시간). **EC2 웹 배포, Docker, HTTPS, `/health` 점검, 최종 아키텍처 PNG 및 외부 접속·Docker 증빙 업로드를 완료했습니다.** 서버 리소스 종료·삭제는 사용자 지시로 보류 중이고, AWS 정책 원문 및 일부 추가 검증 증빙은 별도 확인 대상으로 남겨두었습니다.
 >
 > 최초 계획과 실제 실행에 차이가 있습니다. 이 README의 명령은 **실제로 실행한 방식**을 기록합니다. [초기 실습 안내](docs/manual.md)는 참고 자료입니다.
 
@@ -148,7 +148,7 @@ Access denied: no identity-based policy allows the action
 | VPC | `b31-vpc`, `10.10.0.0/16` |
 | 서브넷 | `b31-subnet-public1-ap-northeast-2a` (퍼블릭) |
 | 라우팅 | `10.10.0.0/16 → local`; `0.0.0.0/0 → Internet Gateway` (퍼블릭 서브넷에 라우트 테이블 명시 연결) |
-| 보안 그룹 | `b31-web-sg`, HTTP TCP 80 / HTTPS TCP 443을 `0.0.0.0/0`에 공개, SSH TCP 22는 직접 SSH용 `/32` 및 EC2 Instance Connect 전용 접속원 범위로 제한 |
+| 보안 그룹 | **`b31-web-sg` (`sg-04bc2bb098cb7bbd1`)**, HTTP TCP 80 / HTTPS TCP 443을 `0.0.0.0/0`에 공개, SSH TCP 22는 직접 SSH용 `/32` 및 EC2 Instance Connect 전용 접속원 범위로 제한. **정확한 EIC 허용 CIDR은 추후 보안 그룹 화면에서 재확인** |
 | IAM | 실습용 `b31-learner`, `B31PracticePolicy` 등 제한 권한 |
 | EC2 | `b31-web`, `i-07336ff478ba4ef67`, `t3.micro` |
 | 운영체제 / 디스크 | Ubuntu 24.04 LTS / EBS gp3 8 GiB |
@@ -156,6 +156,23 @@ Access denied: no identity-based policy allows the action
 | 사설 IPv4 | `10.10.4.1` |
 | 외부 접속 방식 | **A — 브라우저** |
 | 실습 당시 접속 URL | `http://43.202.56.199/` |
+
+## 리소스 이름 규칙과 태그 적용 상태 — 실제 생성 리소스 기준
+
+이번 실습은 **`b31-` 접두어로 같은 과제의 AWS 리소스를 구별**하도록 이름을 붙였습니다.
+
+| 종류 | AWS에 표시된 실제 이름 | 역할 |
+|---|---|---|
+| VPC | `b31-vpc` | 사설 네트워크 범위 `10.10.0.0/16` |
+| Public Subnet | `b31-subnet-public1-ap-northeast-2a` | EC2가 있는 서울 `2a` 가용 영역의 퍼블릭 서브넷 |
+| Route Table | `b31-rtb-public` | `10.10.0.0/16 → local`, `0.0.0.0/0 → IGW` |
+| Security Group | `b31-web-sg` | 웹 80/443, SSH 22 접근 제어 |
+| EC2 Instance | `b31-web` | Ubuntu 웹 서버 및 Docker 배포 |
+
+- **명명 규칙**: `b31-`은 코디세이 **B3-1 과제**, 뒤의 `vpc`, `subnet`, `rtb-public`, `web-sg`, `web`은 리소스 역할을 나타냅니다.
+- **실제 확인**: AWS 콘솔에서 VPC·퍼블릭 서브넷·라우팅 테이블 이름과 연결을 확인했고, EC2·보안 그룹 이름은 기존 설정 및 실습 기록에 남았습니다.
+- **태그의 구별**: AWS의 표시 이름은 많은 EC2/VPC 리소스에서 `Name` 태그로 구현되지만, **모든 리소스에 별도의 `Project=CODYSSEY-B3-1` 같은 사용자 정의 태그를 일괄 적용한 기록은 없습니다.** 과제별 구분은 실제 `b31-` 이름 규칙으로 수행했습니다.
+- **미완료를 정확하게 표시**: 개별 리소스의 전체 태그 목록과 신규 태그의 일괄 적용 여부는 확인 전이며, 태그 추가는 사용자 요청에 따라 보류했습니다.
 
 ## 외부 접속과 접근 제어 — 네트워크 계층 구분
 
