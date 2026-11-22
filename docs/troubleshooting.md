@@ -25,3 +25,11 @@
 **증빙 상태:** 실제 Chrome 오류/성공 화면과 터미널 로그 캡처는 대화에서 확인했으나 GitHub의 `docs/evidence/`에는 아직 업로드되지 않았습니다.
 
 **분석 범위:** 로그는 HTTPS 요청 및 연결 오류를 입증합니다. HTTPS를 선택한 Chrome 내부의 정확한 조건은 이 기록만으로 단정하지 않습니다.
+
+## 인증서 발급 과정 (추가 사례)
+
+- 최초 `sudo certbot --nginx --no-redirect -d codyssey-b31-web.duckdns.org`에서 계정 등록까지 진행했으나 출력이 `Requesting a certificate`에서 중단됨.
+- `sudo certbot certificates`에서 `No certificates found`가 확인되고 실행 중인 Certbot 프로세스가 없음을 확인함.
+- `/var/log/letsencrypt/letsencrypt.log`에서 서버와 ACME 사이의 요청 기록을 확인함. 로그 일부만으로 최종 실패 원인을 단정하지 않음.
+- 재실행 시 `Successfully received certificate`, `Successfully deployed certificate` 및 HTTPS 활성화 성공이 출력됨.
+- 인증서 만료일 2027-02-20, 자동 갱신 예약 작업이 설정되었다는 안내를 확인함.
