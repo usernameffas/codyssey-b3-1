@@ -18,7 +18,7 @@
 | 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | [**최종 PNG**](architecture.png)를 실제 ID·라우팅·Nginx·Docker·HTTPS 반영해 GitHub에 업로드 완료. [편집 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) 보유 | 문서·이미지 구성 완료. 평가 재실행은 아직 전 |
 | 7 | HTTPS 443·보안 그룹 설정 증빙 | 443 인바운드 규칙 추가 화면 확인 | 화면 캡처와 규칙 목적·출처 범위를 함께 정리 |
 | 8 | 외부 접속 방식 A와 URL·화면 | [A 선택 이유 및 HTTP/HTTPS 검증값](assessment-explanations.md) 보완, [7항목 실행 결과](validation-2026-11-22.md) 확보 | 브라우저 캡처 공개 제출용 가공본 업로드는 별도 |
-| 9 | 리소스 삭제 후 잔여 자원 확인 | 아직 보류 | 최종 제출 전 실제 정리 요구를 어떻게 충족할지 확인 필요 |
+| 9 | 리소스 태그·이름 규칙과 관리 | AWS 실제 리소스에 **`b31-` 접두어** 사용: `b31-vpc`, `b31-subnet-public1-ap-northeast-2a`, `b31-rtb-public`, `b31-web-sg`, `b31-web`. [README 실제 명명 규칙](../README.md#리소스-이름-규칙과-태그-적용-상태--실제-생성-리소스-기준)으로 설명 완료 | 추가 사용자 정의 `Project` 태그는 미설정·보류; 이 항목을 삭제 검증으로 잘못 분류한 기존 표를 수정함 |
 | 10 | 퍼블릭 서브넷 라우팅과 outbound | 라우트 테이블의 IGW 기본 경로와 명시적 서브넷 연결을 AWS 콘솔에서 확인. 게스트 Ubuntu의 기본 라우트와 구분해 기록 | [확인값](network-console-verification-2026-11-22.md). SG outbound 규칙의 실제 화면은 필요시 추가 |
 | 11 | IAM 최소 권한과 Security Group 보안의 역할 | [IAM vs SG 구분 및 절차](assessment-explanations.md), [`iam:ListPolicies` 실제 거부 기록](iam-permission-verification-2026-11-22.md) 작성 | 정책 전체 JSON과 다른 서비스의 허용 Action은 관리자 계정 확인 전 |
 | 12 | HTTPS 443을 0.0.0.0/0으로 허용한 범위 | 공개 HTTPS의 목적·외부 스캔과 악성 요청 위험·SSH와 차이·TLS 한계·향후 완화책을 [설명 문서](assessment-explanations.md)에 기록 | 추가 보호 기술은 제안이며 현재 적용으로 주장하지 않음 |
@@ -28,6 +28,8 @@
 | 16 | 단일 EC2에서 ALB 확장 고려 및 운영 설명 | [CPU·메모리·오류율·지연·비용 추적 및 ALB 도입 기준](assessment-explanations.md) 작성 | ALB는 추가 비용이 드는 확장 설계로 이번에는 미설치 |
 
 ## 이전 평가 화면과 현재 문서의 차이
+
+- **평가 #9를 정리/삭제 항목으로 적었던 기존 대응표를 `b31-` 자원 명명 규칙·태그 검토 항목으로 바로잡았습니다.** 자원 삭제는 별도 #5 및 최종 정리 요구에서 관리합니다.
 
 - 사전평가 **6%(1/16)**은 현재 문서 보완 이전의 결과입니다. 문서 수정만으로 점수 상승을 확인했다고 쓰지 않습니다.
 - 평가 **#4는 SSH 항목이 아니라 외부 접속 방식 A 또는 `/health`** 검증입니다. 본 표의 기존 오분류를 실제 사전평가 원본 화면을 대조해 정정했습니다.
