@@ -224,7 +224,7 @@ sudo docker logs --tail 10 b31-docker
 | PDF 요구사항 | 위치 | 상태 |
 | --- | --- | --- |
 | 아키텍처 다이어그램 PNG/PDF 1장 | [**docs/architecture.png**](docs/architecture.png) | **최종 PNG 업데이트 완료** — 실제 설정·라우팅·Nginx·Docker·HTTPS 반영. 편집용 [SVG](docs/architecture-current.svg) 동시 보존 |
-| 웹 서비스 외부 접속 방법·주소·캡처 | 이 README 및 `docs/evidence/` | **접속 확인 완료 / GitHub 캡처 업로드 필요** |
+| 웹 서비스 외부 접속 방법·주소·캡처 | [실제 HTTPS 브라우저 PNG](docs/evidence/portfolio-https-live.png) · [HTTP/HTTPS 상태 기록](docs/evidence/automated-external-check.txt) | **외부 브라우저 자동 촬영·GitHub 업로드 완료**; 원본 휴대전화 캡처는 비공개 보관 |
 | 트러블슈팅 보고서 (최소 1건) | [docs/troubleshooting.md](docs/troubleshooting.md) | **실제 기록 작성** |
 | 리소스 정리 체크리스트 | [docs/cleanup-checklist.md](docs/cleanup-checklist.md) | **정리 절차 기록 / 삭제 아직 미진행** |
 | Docker 보너스: 이미지·실행·포트·캡처 2장 이상 | 이 README 및 `docs/evidence/` | **실행·검증 완료 / 스크린샷 GitHub 업로드 필요** |
@@ -285,7 +285,13 @@ ok
 
 ### 제출용 증빙 이미지
 
-2026-11-22 실습 중 캡처한 원본과 실제 구성도 PNG/PDF를 **별도 ZIP 묶음**으로 확보했습니다. 저장소에 이미지 첨부가 완료되기 전까지 `docs/evidence/` 경로의 파일은 업로드 대기 상태입니다. 계정 토큰·개인키는 증빙에 포함하지 않습니다.
+- [실제 AWS 구성도 최종 PNG](docs/architecture.png) — 퍼블릭 서브넷·라우팅 테이블·보안 그룹·EC2·Docker·HTTPS를 실제 값으로 표현
+- [외부 HTTPS 포트폴리오 화면](docs/evidence/portfolio-https-live.png) — GitHub Actions 브라우저가 실제 운영 웹사이트에 접속해 2026-11-22 촬영한 **새 스크린샷**. 한국어 정상 렌더링 확인
+- [외부 HTTPS /health 화면](docs/evidence/health-https-live.png) — 실제 브라우저의 `ok` 표시
+- [외부 HTTP/HTTPS 응답 텍스트](docs/evidence/automated-external-check.txt) — IP HTTP, 도메인 HTTPS, /health 각 200 및 본문 ok 확인
+- [이미지별 업로드 현황](docs/evidence/README.md)
+
+**실제 휴대전화·AWS 콘솔 원본 사진**에는 휴대전화 알림 및 계정 정보가 표시되므로 공개 저장소에 업로드하지 않았습니다. 별도의 비공개 Imprint에 보관할 예정이며, 공개 제출에 필요한 Docker `docker ps` 원본 캡처 등은 민감정보를 제거한 사본이 필요합니다. GitHub Actions로 촬영한 외부 브라우저 이미지는 **실제 서비스 접속 결과**이며 터미널 스크린샷을 대체해 만들었다고 표현하지 않습니다.
 
 ### 구성도 및 오류 분석
 
