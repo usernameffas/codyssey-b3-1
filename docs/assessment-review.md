@@ -11,21 +11,21 @@
 | # | 평가 화면에서 제시한 쟁점 | 실습·문서 현황 | 보완 또는 확인 |
 |---|---|---|---|
 | 1 | VPC CIDR, local 및 0.0.0.0/0 → Internet Gateway 라우팅 | **19:29 AWS 콘솔에서 VPC ID, 퍼블릭 서브넷 명시적 연결, 활성 경로 2개 직접 확인**. [실제 값 기록](network-console-verification-2026-11-22.md) | 공개 텍스트 증빙 작성 완료. 재평가 결과는 확인 전 |
-| 2 | SSH/원격 접속 방식과 HTTP 200 응답 | EC2 Instance Connect로 접속, curl 200 응답 확인 | EIC 원리, 보안 그룹 22 제한과 실제 접속 증빙을 하나의 절로 설명 |
+| 2 | SSH/원격 접속 방식과 HTTP 200 응답 | EC2 Instance Connect 접속, `curl` 200, [방식 A와 네트워크 경로](assessment-explanations.md) 기록 | 원본 접속 화면 비공개 보관·공개 증빙 링크 점검 필요 |
 | 3 | 보안 그룹 HTTP/SSH 설명 | 평가에서 PASS | 기존 근거 보존 |
 | 4 | 실제 SSH 접속 증빙 | EIC 터미널 캡처가 대화에 존재 | GitHub 증빙 폴더에 민감정보 제외하고 캡처 추가 |
 | 5 | EC2·EBS 등 리소스 정리 체크리스트 | 작성 완료, **실제 삭제는 사용자 요청으로 보류** | 삭제 완료로 허위 표기하지 않음. 승인 후 수행·완료 기록 필요 |
 | 6 | 퍼블릭 서브넷·IGW·라우팅·EC2를 연결한 구조도 | 실제 VPC/서브넷/라우팅 테이블 ID와 활성 경로 확인. [최신 SVG](architecture-current.svg) 및 [콘솔 근거](network-console-verification-2026-11-22.md) | **필수 제출 PNG/PDF는 최신 구성을 반영한 최종본인지 점검 필요** |
 | 7 | HTTPS 443·보안 그룹 설정 증빙 | 443 인바운드 규칙 추가 화면 확인 | 화면 캡처와 규칙 목적·출처 범위를 함께 정리 |
-| 8 | 외부 접속 방식 A와 URL·화면 | 브라우저에서 HTTP와 HTTPS 포트폴리오 확인 | 실제 브라우저 캡처, 명시적 URL, 설정 전후 결과를 함께 링크 |
+| 8 | 외부 접속 방식 A와 URL·화면 | [A 선택 이유 및 HTTP/HTTPS 검증값](assessment-explanations.md) 보완, [7항목 실행 결과](validation-2026-11-22.md) 확보 | 브라우저 캡처 공개 제출용 가공본 업로드는 별도 |
 | 9 | 리소스 삭제 후 잔여 자원 확인 | 아직 보류 | 최종 제출 전 실제 정리 요구를 어떻게 충족할지 확인 필요 |
 | 10 | 퍼블릭 서브넷 라우팅과 outbound | 라우트 테이블의 IGW 기본 경로와 명시적 서브넷 연결을 AWS 콘솔에서 확인. 게스트 Ubuntu의 기본 라우트와 구분해 기록 | [확인값](network-console-verification-2026-11-22.md). SG outbound 규칙의 실제 화면은 필요시 추가 |
-| 11 | IAM 최소 권한과 Security Group 보안의 역할 | 제한 IAM 계정 `b31-learner`와 정책 사용, SG 22 출처 제한 | IAM 정책 권한 목록·적용 근거 추가. 확인되지 않은 정책 내용은 단정 금지 |
-| 12 | HTTPS 443을 0.0.0.0/0으로 허용한 범위 | 공개 웹 서비스의 HTTPS 접속을 위해 443 전체 허용 | 공개 웹 포트는 모든 IPv4 허용이 의도된 설정임을 설명. SSH 22와 구분 |
+| 11 | IAM 최소 권한과 Security Group 보안의 역할 | [IAM vs SG 구분 및 절차](assessment-explanations.md), [`iam:ListPolicies` 실제 거부 기록](iam-permission-verification-2026-11-22.md) 작성 | 정책 전체 JSON과 다른 서비스의 허용 Action은 관리자 계정 확인 전 |
+| 12 | HTTPS 443을 0.0.0.0/0으로 허용한 범위 | 공개 HTTPS의 목적·외부 스캔과 악성 요청 위험·SSH와 차이·TLS 한계·향후 완화책을 [설명 문서](assessment-explanations.md)에 기록 | 추가 보호 기술은 제안이며 현재 적용으로 주장하지 않음 |
 | 13 | 브라우저 오류·네트워크 로그와 개인 정보 | docs/troubleshooting.md에 오류 과정 기록 | 원본 로그 전체 업로드는 URL·계정정보 포함 가능성이 있어 익명화된 요약·화면만 공유 |
-| 14 | 오류 해결의 증상→가설→검증→조치→결과 | 보고서에 단계별 기록 존재 | 각 단계의 시각·명령어·스크린샷을 명확히 연결 |
-| 15 | IAM 실제 최소 권한 검증 | 학습용 역할·정책 일부 이름만 문서화 | 실제 허용/거부 동작을 바탕으로 범위·한계 문서화, 미검증은 표시 |
-| 16 | 단일 EC2에서 ALB 확장 고려 및 운영 설명 | ALB 구성은 이번 단일 EC2 실습에서 수행하지 않음 | ALB는 확장 설계로 분리, 실습 적용했다고 쓰지 않음 |
+| 14 | 오류 해결의 증상→가설→검증→조치→결과 | [실제 Chrome 오류 사례](troubleshooting.md), [라우팅→SG→IP/DNS→서버→Docker 점검 순서](assessment-explanations.md), [실행 검증](validation-2026-11-22.md) 정리 | 스크린샷 공개용 가공본 별도 업로드 필요 |
+| 15 | IAM 실제 최소 권한 검증 | `iam:ListPolicies` 실제 접근 거부 확인; [최소 권한을 단계적으로 부여하는 절차](assessment-explanations.md) 서술 | 정책 JSON·전체 허용/거부 동작은 아직 검증 전, 절차는 설계상 권고 |
+| 16 | 단일 EC2에서 ALB 확장 고려 및 운영 설명 | [CPU·메모리·오류율·지연·비용 추적 및 ALB 도입 기준](assessment-explanations.md) 작성 | ALB는 추가 비용이 드는 확장 설계로 이번에는 미설치 |
 
 ## 확인된 실제 작업
 
@@ -42,7 +42,7 @@
 ## 제출용 증빙에서 남은 작업
 
 1. 실제 구성 PNG/PDF와 원본 캡처를 GitHub 저장소에 첨부 및 파일 링크 점검 (현재 별도 묶음 자료는 있으나 GitHub 업로드는 별도 상태)
-2. IAM 정책 권한 및 거부 동작을 안전하게 문서화
+2. `iam:ListPolicies` 실제 거부는 문서화 완료. `B31PracticePolicy`의 전체 Action JSON·정책 연결 범위는 관리자 계정에서 확인 필요
 3. 마지막에 사용자가 승인한 경우에 한해 자원 정리 및 실제 삭제 완료 화면 확보
 4. 다시 AI 사전평가를 실행해 남은 항목을 확인
 
