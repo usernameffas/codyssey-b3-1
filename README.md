@@ -26,6 +26,17 @@
 - `sudo nginx -t`: 구문 검사 성공
 - EC2 파일로 로그 저장: `~/b31-validation.txt`. AWS 리소스 삭제는 **보류**.
 
+## AWS 콘솔 네트워크 검증 — 2026-11-22 19:29 KST
+
+[라우팅 테이블·명시적 서브넷 연결의 콘솔 확인값 및 해설](docs/network-console-verification-2026-11-22.md)
+
+- VPC: `b31-vpc` (`vpc-03069500f8707f0f9`, `10.10.0.0/16`)
+- 라우팅 테이블: `b31-rtb-public` (`rtb-00e3c2f405b2e1ea0`), **기본 테이블 아님**
+- 명시적 연결: `b31-subnet-public1-ap-northeast-2a` (`subnet-0814ca163de8b1b5f`)
+- 라우팅: `10.10.0.0/16 → local` / `0.0.0.0/0 → Internet Gateway`; **두 항목 모두 활성**
+- IGW ID 뒷자리는 모바일 화면에서 생략되어 추정하지 않았습니다.
+- 개인 알림·계정 관련 정보가 표시된 원본 화면은 공개 저장소에 게시하지 않고 텍스트 검증값만 기록했습니다.
+
 ## 실습 목적 및 구성
 
 - 필수: AWS VPC 네트워크를 구성하고 EC2에서 웹사이트를 외부에 HTTP로 공개
