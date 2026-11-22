@@ -1,35 +1,107 @@
-# 코디세이 B3-1 · EC2에 소개 페이지 올리기
+# 코디세이 B3-1 — AWS EC2 웹사이트 배포 실습 기록
 
-이 프로젝트는 B1-1 포트폴리오를 서울 리전 EC2에서 제공하는 실습을 시작할 수 있도록 구성했습니다. 설정 파일과 기록 양식은 준비됐으며, 아래 접속 정보와 제출 증빙은 실제 AWS 실습에서 채웁니다. [수동 실습 순서](docs/manual.md) · [설계도 초안](docs/architecture.png)
+> 실제 수행일: 2026-11-22 (한국시간). 진행 중인 실습이며 **리소스 정리와 증빙 업로드는 아직 완료되지 않았습니다.**
+>
+> 최초 계획과 실제 실행에 차이가 있습니다. 이 README의 명령은 **실제로 실행한 방식**을 기록합니다. [초기 실습 안내](docs/manual.md)는 참고 자료입니다.
 
-## 배포 순서
+## 실습 목적 및 구성
 
-1. AWS 콘솔에서 VPC, 퍼블릭 서브넷, Internet Gateway와 Route Table을 연결합니다. 서울 리전의 EC2에 퍼블릭 IPv4를 할당합니다. 보안 그룹에서 80번은 공개하고, SSH 22번은 실습할 PC의 주소로 제한합니다.
-2. [B1-1 저장소](https://github.com/usernameffas/codyssey-b1-1)의 `index.html`, `css/`, `js/`, `images/`를 `/var/www/b31-site/`로 복사합니다. Nginx를 설치한 EC2에서 `config/site-http.conf`를 `/etc/nginx/sites-available/default`에 적용합니다. `sudo nginx -t`, `sudo systemctl reload nginx`, `curl -I http://localhost` 순서로 확인합니다. 외부 브라우저에서 `http://퍼블릭-IP`를 열어 주소와 화면을 캡처합니다.
-3. Docker 보너스를 적용할 때는 아래 명령으로 포트폴리오를 컨테이너에서 제공하고, `config/site-docker.conf`로 호스트 Nginx 설정을 교체합니다. `sudo nginx -t` 후 다시 불러오고, 내부 HTTP 200과 외부 접속을 확인합니다. `sudo docker ps`와 외부 브라우저 화면을 각각 캡처합니다.
-4. HTTPS 보너스는 도메인이나 서브도메인의 A 레코드를 퍼블릭 IPv4에 연결하는 것부터 시작합니다. 보안 그룹에 443번을 열고 호스트 Nginx의 `server_name`에 도메인을 지정한 뒤 Certbot으로 인증서를 적용합니다. 도메인으로 외부 접속해 HTTPS 화면을 캡처합니다. [인증서 적용 명령](docs/manual.md#4-보너스-1--도메인으로-https-연결)
+- 필수: AWS VPC 네트워크를 구성하고 EC2에서 웹사이트를 외부에 HTTP로 공개
+- 보너스 2: Docker 컨테이너에서 웹사이트를 제공하고 외부 접속 검증
+- 보너스 1: 도메인·TLS 인증서를 이용한 HTTPS — **미진행(선택사항)**
+- 원본 웹사이트: [codyssey-b1-1](https://github.com/usernameffas/codyssey-b1-1)
 
-Docker 실행 명령은 EC2에서 사용합니다. 이미지 이름은 `nginx:stable-alpine`이며, EC2 내부 주소 `127.0.0.1:8080`을 컨테이너의 80번 포트에 연결합니다. 외부 요청은 호스트 Nginx가 받아 이 주소로 넘깁니다.
+| 항목 | 실제 구성 |
+| --- | --- |
+| 리전 | 서울 `ap-northeast-2` |
+| VPC | `b31-vpc`, `10.10.0.0/16` |
+| 서브넷 | `b31-subnet-public1-ap-northeast-2a` (퍼블릭) |
+| 라우팅 | `10.10.0.0/16 → local`; `0.0.0.0/0 → Internet Gateway` |
+| 보안 그룹 | `b31-web-sg`, HTTP TCP 80 허용, SSH TCP 22 접속 출처 제한 |
+| IAM | 실습용 `b31-learner`, `B31PracticePolicy` 등 제한 권한 |
+| EC2 | `b31-web`, `i-07336ff478ba4ef67`, `t3.micro` |
+| 운영체제 / 디스크 | Ubuntu 24.04 LTS / EBS gp3 8 GiB |
+| 공인 IPv4 | `43.202.56.199` (**실습 당시 주소, 중지·재시작 시 변경 가능**) |
+| 사설 IPv4 | `10.10.4.1` |
+| 외부 접속 방식 | **A — 브라우저** |
+| 실습 당시 접속 URL | `http://43.202.56.199/` |
+
+## 배포 과정 및 실행 명령
+
+### 직접 설치한 Nginx
 
 ```bash
-sudo docker run -d --name b31-portfolio \
-  -p 127.0.0.1:8080:80 \
-  --mount type=bind,src=/var/www/b31-site,dst=/usr/share/nginx/html,readonly \
-  nginx:stable-alpine
-# --- 포트폴리오 Docker 실행 끝 ---
+git --version                       # 2.43.0
+git clone https://github.com/usernameffas/codyssey-b1-1.git
+sudo cp -r ~/codyssey-b1-1/index.html ~/codyssey-b1-1/css ~/codyssey-b1-1/js ~/codyssey-b1-1/images /var/www/html/
+curl -I http://localhost           # HTTP/1.1 200 OK, Nginx 1.24.0
 ```
 
-## 실습 후 채울 제출 기록
+외부 Chrome에서 포트폴리오 페이지와 CSS 디자인 표시를 확인했습니다. 이 단계는 Docker 적용 **이전**의 필수 검증입니다.
 
-| 검증 | 기록할 값 |
-| --- | --- |
-| 외부 접속 방식 | A · 브라우저에서 퍼블릭 IP 접속 |
-| EC2 접속 주소 | 실제 `http://퍼블릭-IP` |
-| 필수 HTTP 접속 | `curl -I http://localhost` 결과와 외부 브라우저 캡처 |
-| Docker 보너스 | `docker ps`에서 `Up`이 보이는 캡처와 외부 접속 캡처 |
-| HTTPS 보너스 | 실제 도메인과 인증서가 적용된 외부 브라우저 화면 |
-| 네트워크 설계도 | 실제 사용한 값으로 수정한 [docs/architecture.png](docs/architecture.png) |
-| 오류 해결 기록 | [docs/troubleshooting.md](docs/troubleshooting.md) |
-| 정리 결과 | [docs/cleanup-checklist.md](docs/cleanup-checklist.md) |
+### 보너스 2 — Docker
 
-캡처를 `docs/evidence/`에 넣고 위 표에 파일 링크를 추가합니다. 인증에 쓰는 키 파일은 실습 프로젝트와 분리해 본인이 관리하는 위치에 보관합니다.
+```bash
+sudo apt install docker.io -y
+sudo systemctl is-active docker    # active
+sudo docker pull nginx:alpine
+sudo docker run -d --name b31-docker -p 8080:80 -v /var/www/html:/usr/share/nginx/html:ro nginx:alpine
+sudo docker ps                     # b31-docker: Up
+curl -I http://localhost:8080      # HTTP/1.1 200 OK, Nginx 1.31.1
+```
+
+- 이미지: `nginx:alpine`
+- 컨테이너: `b31-docker`
+- 포트 매핑: **호스트 8080 → 컨테이너 80**
+- 파일 연결: `/var/www/html` → `/usr/share/nginx/html` (읽기 전용)
+- 보안 그룹에서 8080 포트를 외부에 추가 개방하지 않았습니다.
+- 참고: 현재 Docker `-p 8080:80`은 호스트의 여러 인터페이스에 바인딩됩니다. 계속 운영할 때는 필요에 따라 루프백 바인딩으로 제한할 수 있습니다.
+
+호스트 Nginx 설정을 백업하고 아래 리버스 프록시로 변경했습니다.
+
+```nginx
+server {
+    listen 80 default_server;
+    server_name _;
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+    }
+}
+```
+
+```bash
+sudo nginx -t                       # syntax is ok / test is successful
+sudo systemctl reload nginx
+curl -I http://localhost            # HTTP/1.1 200 OK
+sudo docker logs --tail 10 b31-docker
+```
+
+컨테이너 로그에서 `GET /`, CSS·JS·SVG 요청과 `HEAD /`의 **200 응답**을 확인했습니다. Docker 적용 후에도 외부 Chrome에서 포트폴리오 화면을 확인했습니다. 브라우저의 `favicon.ico` 요청은 404였으며 본문 페이지와 정적 리소스는 정상입니다.
+
+## 제출물 및 증빙 현황
+
+| PDF 요구사항 | 위치 | 상태 |
+| --- | --- | --- |
+| 아키텍처 다이어그램 PNG/PDF 1장 | [docs/architecture.png](docs/architecture.png) | **기존 초안 있음; 실제 구성값 반영 및 최종 점검 필요** |
+| 웹 서비스 외부 접속 방법·주소·캡처 | 이 README 및 `docs/evidence/` | **URL·방법 기록 완료 / 캡처 저장소 업로드 필요** |
+| 트러블슈팅 보고서 (최소 1건) | [docs/troubleshooting.md](docs/troubleshooting.md) | **실제 기록 작성** |
+| 리소스 정리 체크리스트 | [docs/cleanup-checklist.md](docs/cleanup-checklist.md) | **정리 절차 기록 / 삭제 아직 미진행** |
+| Docker 보너스: 이미지·실행·포트·캡처 2장 이상 | 이 README 및 `docs/evidence/` | **실행·검증 완료 / `docker ps`와 외부 접속 캡처 업로드 필요** |
+
+과제에서는 Docker 보너스에 **`docker ps`에서 Up인 화면과 외부 접속 결과 화면**을 각 1장 이상 요구합니다. 대화에서 확인한 캡처는 GitHub 저장소에 아직 업로드되지 않았습니다. `docs/evidence/`에 업로드한 후 여기 링크를 추가합니다.
+
+### 확인한 접속 화면
+
+- 필수 검증: `http://43.202.56.199/`에서 B1-1 포트폴리오 정상 표시
+- Docker 검증: 동일 주소에서 리버스 프록시를 거쳐 컨테이너가 제공하는 포트폴리오 정상 표시
+- 확인 시각: 2026-11-22 16:18 / 17:16 KST 전후
+
+### 구성도 및 오류 분석
+
+- [실제 아키텍처 구성 설명](docs/architecture.md)
+- [접속 장애 트러블슈팅](docs/troubleshooting.md)
+- [실습 리소스 정리 체크리스트](docs/cleanup-checklist.md)
+
+## 필수 운영 정리 — 아직 미완료
+
+제출 증빙을 확보한 후 **EC2 Terminate, 잔여 EBS 확인, 인터넷 게이트웨이/라우팅 테이블/서브넷/보안 그룹/VPC 삭제, Billing 점검** 순서로 자원을 정리합니다. EC2 중지만으로 모든 비용이 정리되는 것은 아닙니다. 실제 삭제 완료 여부는 [체크리스트](docs/cleanup-checklist.md)에 반영합니다. 최종 정리 전까지 실습용 서버가 실행 중이면 비용이 발생할 수 있습니다.
