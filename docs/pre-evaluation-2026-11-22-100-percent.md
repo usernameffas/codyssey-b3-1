@@ -37,6 +37,8 @@
 
 **주의:** #5는 리소스 정리 **체크리스트가 적절하다는 이유로 PASS** 받은 것입니다. **EC2/VPC/EBS 등 실제 자원 삭제가 완료됐다는 뜻은 아닙니다.** 서버 운영을 확인하는 증빙을 확보하고 별도 사용자 승인 후 자원을 정리해야 합니다.
 
+**최종 평가 후 추가 보강:** #4(평가 원문 1-4)에 해당하는 `http://43.202.56.199/` **실제 Chrome 외부 브라우저 사진**을 [GitHub에 추가](evidence/portfolio-http-public-ip-live.png)하고 [촬영 워크플로](../.github/workflows/capture-external-proof.yml)의 정상 완료도 확인했다. 또한 3-2의 최소 권한 필요 이유, 3-4의 가설→검증 순서 이유, 4-4의 Billing 의심 자원·추적·정리 절차, SSH의 AWS EC2 Instance Connect 관리 출처 추가 이유를 [설명 문서](assessment-explanations.md), [SSH 기록](ssh-security-verification-2026-11-22.md), [트러블슈팅](troubleshooting.md)에 보완했다. 실습 자원·IAM·SG 설정은 변경하지 않았다.
+
 ## 사진을 설명 아래에서 확인
 
 [실제 AWS 구성도·Docker 실행·외부 HTTPS 포트폴리오·`/health`의 스크린샷이 설명 바로 아래에 배치된 문서](evidence/visual-guide.md)
