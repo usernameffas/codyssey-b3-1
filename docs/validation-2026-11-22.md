@@ -41,7 +41,15 @@ sudo nginx -t
 | 6 | `sudo certbot certificates` | `Certificate Name: codyssey-b31-web.duckdns.org`, `Key Type: ECDSA`, `Expiry Date: 2027-02-20 08:01:17+00:00 (VALID: 89 days)` | 통과 |
 | 7 | `sudo nginx -t` | `nginx: the configuration file /etc/nginx/nginx.conf syntax is ok`, `nginx: configuration file /etc/nginx/nginx.conf test is successful` | 통과 |
 
-### 대표 출력
+### 저장된 원본 파일을 `cat`으로 다시 확인 (2026-11-22 20:13~20:14 KST)
+
+EC2 Instance Connect에서 다음 명령으로 **실제 원본 파일이 존재하고 7개 항목 전체가 저장되어 있음**을 재검증했습니다.
+
+```bash
+cat ~/b31-validation.txt
+```
+
+아래는 **사용자가 올린 `cat` 출력 화면 2장을 확대해 확인한 텍스트 전사**입니다. 터미널 폭 때문에 줄이 바뀐 `docker ps`의 내용을 **필드별로 정리**했으며, `curl`의 진행률 표시와 인증서 일련번호 등 판정에 불필요한 필드는 생략했습니다. 따라서 전사는 실제 출력의 확인된 핵심 행을 기반으로 하되 **파일의 원문 바이트 전체를 복사한 기록과 구분**합니다.
 
 ```text
 === 1. NGINX / DOCKER STATUS ===
@@ -49,35 +57,62 @@ active
 active
 
 === 2. DOCKER CONTAINER ===
-... nginx:alpine ... b31-docker ... Up 2 hours ... 0.0.0.0:8080->80/tcp ...
+IMAGE          nginx:alpine
+COMMAND        "/docker-entrypoint..."  (docker ps 자체에서 줄임 표시)
+CREATED        2 hours ago
+STATUS         Up 2 hours
+PORTS          0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+NAMES          b31-docker
 
 === 3. DOCKER HTTP ===
 HTTP/1.1 200 OK
+Server: nginx/1.31.9
+Date: Sun, 22 Nov 2026 10:16:51 GMT
+Content-Type: text/html
 Content-Length: 10227
+Last-Modified: Sun, 22 Nov 2026 07:16:56 GMT
+Connection: keep-alive
+ETag: "6b0296e8-27f3"
+Accept-Ranges: bytes
 
 === 4. NGINX HTTP ===
 HTTP/1.1 200 OK
 Server: nginx/1.24.0 (Ubuntu)
+Date: Sun, 22 Nov 2026 10:16:51 GMT
+Content-Type: text/html
 Content-Length: 10227
+Connection: keep-alive
+Last-Modified: Sun, 22 Nov 2026 07:16:56 GMT
+ETag: "6b0296e8-27f3"
+Accept-Ranges: bytes
 
 === 5. HTTPS HEALTH ===
 HTTP/1.1 200 OK
+Server: nginx/1.24.0 (Ubuntu)
+Date: Sun, 22 Nov 2026 10:16:51 GMT
 Content-Type: text/plain
 Content-Length: 2
+Connection: keep-alive
 
 ok
 
 === 6. TLS CERTIFICATE ===
-Certificate Name: codyssey-b31-web.duckdns.org
-Key Type: ECDSA
-Expiry Date: 2027-02-20 08:01:17+00:00 (VALID: 89 days)
+Found the following certs:
+  Certificate Name: codyssey-b31-web.duckdns.org
+    Key Type: ECDSA
+    Domains: codyssey-b31-web.duckdns.org
+    Expiry Date: 2027-02-20 08:01:17+00:00 (VALID: 89 days)
+    Certificate Path: /etc/letsencrypt/live/codyssey-b31-web.duckdns.org/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/codyssey-b31-web.duckdns.org/privkey.pem
 
 === 7. NGINX CONFIG TEST ===
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
 
-> 대표 출력은 화면에 드러난 주요 행을 발췌한 것입니다. `...`는 `docker ps` 행 일부 생략을 뜻하며 완전한 명령 원문과 동일하다고 주장하지 않습니다. EC2 홈 디렉터리에 `~/b31-validation.txt`라는 실제 출력 파일이 생성됐습니다.
+**Docker `ps` 원본은 화면 너비에 따라 열과 행이 줄바꿈되어 표시됩니다.** 위의 IMAGE·COMMAND·STATUS·PORTS·NAMES는 사진에 나타난 해당 항목을 필드별로 재배열한 값입니다. `docker ps`의 `COMMAND`에 있는 `...`는 **도구가 원래 긴 명령을 줄여 표기한 부분**이지, 증빙 내용을 임의로 감춘 것이 아닙니다.
+
+**추가 검증된 사실:** 2026-11-22 20:14 KST에 다시 조회해도 이 7개 검증 출력과 `~/b31-validation.txt` 저장 상태가 유지되었습니다. 조회 당시의 출력은 **19:16 KST에 실행해 저장된 기록**이므로 이후 서버 상태를 20:14 시점에 실시간으로 다시 측정했다고 주장하지 않습니다.
 
 ## 확인 범위
 
