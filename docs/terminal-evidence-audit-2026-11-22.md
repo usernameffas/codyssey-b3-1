@@ -149,7 +149,8 @@ Reason: no identity-based policy allows the action
 | #2 SSH와 호스트 HTTP 200 | 본 문서 2·3절 | 필요하면 EIC 접속 전 과정의 원본 캡처를 비공개 기록으로 보완 |
 | #3 보안 그룹 HTTP 80·SSH 22 | README 구성표 | 평가 당시 PASS. 세부 규칙 원문은 추가 확인 가능 |
 | **#4 외부 접속 방식 A 또는 /health** | 본 문서 3·4절, README의 접속 URL | **이 항목은 이전 보완표에서 SSH로 잘못 분류했으므로 정정** |
-| #5·#9 리소스 정리 | [cleanup-checklist.md](cleanup-checklist.md) | **사용자 요청으로 삭제 보류**, 완료로 표기하지 않음 |
+| #5 리소스 정리 및 삭제 증빙 | [cleanup-checklist.md](cleanup-checklist.md) | **사용자 요청으로 삭제 보류**, 완료로 표기하지 않음 |
+| #9 자원 태그·이름 규칙 | [README 실제 이름 규칙](../README.md) | `b31-` 접두어로 리소스 식별, 별도 사용자 정의 태그 추가는 보류 |
 | #6 실제 아키텍처 PNG/PDF | [architecture-current.svg](architecture-current.svg)와 기존 `architecture.png` | 과제 규격에 맞는 PNG/PDF 최종 업로드 필요 |
 | #7·#12 공개 포트의 위험·대안 | [assessment-explanations.md](assessment-explanations.md) | 실제 보안 그룹 전체 설정 원문은 추가 확인 가능 |
 | #8 선택한 방식 A의 이유 | [assessment-explanations.md](assessment-explanations.md) | 설명 작성 완료 |
