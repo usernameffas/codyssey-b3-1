@@ -51,7 +51,7 @@ text { font-family: "DejaVu Sans", Arial, sans-serif; fill: #14243B; }
 <rect x="291" y="901" width="818" height="59" rx="9" fill="#E8F8F1" stroke="#3A9F73" stroke-width="2"/>
 <text x="700" y="924" text-anchor="middle" class="big">Host Nginx :80 + :443  |  Let's Encrypt TLS</text>
 <text x="700" y="948" text-anchor="middle" class="small">/health → 200 ok   |   reverse proxy → 127.0.0.1:8080</text>
-<path d="M700 960 V975" class="line"/>
+<path d="M700 960 V980" stroke="#4075B7" stroke-width="3" fill="none"/>
 <rect x="291" y="980" width="818" height="54" rx="9" fill="#FFF7E8" stroke="#C9953C" stroke-width="2"/>
 <text x="700" y="1003" text-anchor="middle" class="big">Docker: b31-docker (nginx:alpine)</text>
 <text x="700" y="1024" text-anchor="middle" class="small">Host :8080 → container :80  |  read-only /var/www/html B1-1 portfolio</text>
