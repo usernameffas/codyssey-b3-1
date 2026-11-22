@@ -29,13 +29,21 @@ jobs:
           printf 'HTTPS /health body: %s\n' "$health" >> docs/evidence/automated-external-check.txt
           test "$health" = "ok"
 
+      - name: Install Korean fonts for accurate browser rendering
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          fc-cache -f
+          fc-list :lang=ko family | head -n 5
+
       - name: Capture live public portfolio without phone notifications
         shell: bash
         run: |
           set -euo pipefail
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           echo "Capturing with: $CHROME"
-          timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/portfolio-https-live.png 'https://codyssey-b31-web.duckdns.org/'
+          timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --lang=ko-KR --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/portfolio-https-live.png 'https://codyssey-b31-web.duckdns.org/'
           timeout 45s "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --disable-dev-shm-usage --window-size=1280,900 --virtual-time-budget=3000 --screenshot=docs/evidence/health-https-live.png 'https://codyssey-b31-web.duckdns.org/health'
           file docs/evidence/portfolio-https-live.png docs/evidence/health-https-live.png
           test -s docs/evidence/portfolio-https-live.png
