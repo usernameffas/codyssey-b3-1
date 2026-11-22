@@ -1,0 +1,49 @@
+name: Render AWS architecture PNG
+on:
+  push:
+    paths:
+      - docs/architecture-current.svg
+      - .github/workflows/render-architecture.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install SVG renderer
+        run: python3 -m pip install --user cairosvg
+
+      - name: Convert verified SVG to submission PNG
+        run: |
+          python3 - <<'PY'
+          import cairosvg
+          cairosvg.svg2png(
+              url="docs/architecture-current.svg",
+              write_to="docs/architecture.png",
+              output_width=1800,
+              output_height=1590
+          )
+          print("Rendered docs/architecture.png from docs/architecture-current.svg")
+          PY
+          file docs/architecture.png
+          test -s docs/architecture.png
+
+      - name: Commit generated PNG
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/architecture.png
+          if git diff --cached --quiet; then
+            echo "Architecture PNG is up to date."
+          else
+            git commit -m "Render actual B3-1 AWS architecture to PNG"
+            git push
+          fi
