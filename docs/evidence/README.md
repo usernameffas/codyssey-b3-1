@@ -1,38 +1,41 @@
-# 증빙 화면 목록 및 업로드 상태
+# B3-1 증빙 목록 — 실제 업로드 파일과 텍스트 검증 구분
 
-> 2026-11-22 원본을 대화에서 확인함. **공개 가능한 외부 브라우저 캡처 2장과 HTTP 상태 확인 텍스트를 GitHub Actions로 새로 촬영·업로드 완료했습니다.** EC2 터미널 및 AWS 콘솔의 개인 정보가 포함된 원본 사진은 아직 공개 저장소에 올리지 않았습니다.
+> 확인일: 2026-11-22. **아키텍처 최종 PNG, 실제 Docker 터미널 크롭본, 실제 사이트의 외부 HTTPS 브라우저 캡처 2장, HTTP/HTTPS 자동 점검 텍스트를 저장소에 업로드했습니다.** AWS 콘솔과 휴대전화의 나머지 원본 사진들은 개인 알림·계정 정보가 포함되어 공개 업로드를 보류했습니다. **아래 표의 텍스트 대체는 사진을 업로드했다는 뜻이 아닙니다.**
 
-## 실제 GitHub에 업로드된 외부 검증 증빙
+## 실제 업로드가 완료된 파일
 
-| 파일 | 실제 취득 방식 및 입증 범위 |
-|---|---|
-| [portfolio-https-live.png](portfolio-https-live.png) | **실제 운영 중인 외부 HTTPS 포트폴리오**를 GitHub Actions의 headless Chrome으로 접속한 뒤 촬영. 한국어 폰트 설치 후 한글 정상 출력 확인. 주소 표시줄·휴대전화 알림은 사진에 없음 |
-| [health-https-live.png](health-https-live.png) | 같은 외부 브라우저에서 **HTTPS `/health`의 본문 `ok`**를 실제 촬영 |
-| [automated-external-check.txt](automated-external-check.txt) | 외부 실행 환경에서 `http://43.202.56.199/`, `https://codyssey-b31-web.duckdns.org/`, `https://codyssey-b31-web.duckdns.org/health`의 **HTTP 200**과 `/health` 응답 본문 `ok`를 실제 확인한 텍스트 출력 |
+| 공개 파일 | 증명 내용 | 촬영·기록 방법 |
+|---|---|---|
+| [../architecture.png](../architecture.png) | VPC·퍼블릭 서브넷·라우팅 테이블·IGW·보안 그룹·EC2·Nginx·Docker·HTTPS | 확인된 AWS 설정값으로 만든 최종 구성도 |
+| [docker_ps_actual_redacted.png](docker_ps_actual_redacted.png) | Docker `b31-docker`, `nginx:alpine`, `Up`, 8080→80 | 실제 사용자 SSH 터미널 스크린샷에서 식별정보가 있는 바깥 영역을 제외한 크롭본 |
+| [portfolio-https-live.png](portfolio-https-live.png) | 인터넷에서 HTTPS 포트폴리오 정상 렌더링 | GitHub Actions Chrome으로 **실제 운영 중 사이트에 외부 접속해 새로 촬영**, 한국어 폰트 포함 |
+| [health-https-live.png](health-https-live.png) | 외부 HTTPS `/health`에 `ok` 표시 | 실제 외부 브라우저로 촬영 |
+| [automated-external-check.txt](automated-external-check.txt) | HTTP 공인 IP / HTTPS 도메인 / HTTPS `/health` 각 200, 응답 본문 `ok` | GitHub Actions에서 실제 HTTP 요청 실행 후 저장 |
 
-자동화 소스는 [capture-external-proof.yml](../../.github/workflows/capture-external-proof.yml)이며 **실제 서비스에 외부 접속해 캡처한 파일**입니다. 사진에 브라우저 주소창은 포함되지 않으므로 URL은 `automated-external-check.txt` 및 README에 별도로 명시합니다. **실제 사용자 휴대전화 화면을 대체한 것으로 속여 제출하지 않습니다.**
+실제 외부 재확인 코드는 [capture-external-proof.yml](../../.github/workflows/capture-external-proof.yml)입니다. 브라우저 캡처에는 주소 표시줄이 없으므로 **URL의 정확한 텍스트 및 HTTP 상태**는 [automated-external-check.txt](automated-external-check.txt)와 [README](../../README.md)에 함께 표시했습니다.
 
-## 실제 터미널에서 추출한 공개용 증빙
+## 항목별 남은 원본 사진과 텍스트 증빙
 
-[Docker ps 실제 터미널 크롭본](docker_ps_actual_redacted.png)은 2026-11-22 실제 EC2 Instance Connect 화면에서 명령어와 출력이 있는 부분만 남긴 자료입니다. **화면 합성·문구 변경 없이 원본을 잘라 확대·고대비 처리**했으며, 원본 전화 알림과 계정 표시 줄은 포함하지 않았습니다. Docker의 `Up` 상태는 [명령어 텍스트 검증](../validation-2026-11-22.md)과 교차 검증할 수 있습니다.
+아래 표는 **새로 올릴 필요가 있는 모든 파일의 목록이 아니라, 원본 사진 종류와 현재 입증 경로를 대조**한 것입니다. AI 사전평가용 텍스트 근거와 과제 자체의 이미지 제출 요구사항은 서로 구분합니다.
 
-## 원본 모바일 캡처 중 아직 별도 업로드가 필요한 자료
-
-| 권장 파일명 | 촬영 내용 | 무엇을 입증하는가 | 상태 |
+| 기존 증빙 번호 | 검증할 내용 | 현재 확인된 텍스트·이미지 근거 | 공개 업로드 상태 / 후속 검토 |
 |---|---|---|---|
-| `01_http_portfolio.png` | Chrome 공인 IP HTTP 포트폴리오 | EC2 외부 HTTP 접속 | 업로드 필요 |
-| [docker_ps_actual_redacted.png](docker_ps_actual_redacted.png) | **사용자 실제 EC2 터미널 사진에서 휴대전화·AWS 헤더만 크롭**; `sudo docker ps` 출력 | `b31-docker`의 `Up`, 이미지·포트 매핑 | **공개용 크롭본 업로드 완료**. 원본 사진은 비공개 보관 대상 |
-| `03_docker_curl.png` | `curl -I http://localhost:8080` | 컨테이너 HTTP 200 | 업로드 필요 |
-| `04_docker_logs.png` | Docker access log | 정적 파일 및 요청 성공 | 업로드 필요 |
-| `05_duckdns_record.png` | DuckDNS 이름·current IP | DNS 연결 | 업로드 필요; **token 및 계정 정보 반드시 제거** |
-| `06_domain_http.png` | http://codyssey-b31-web.duckdns.org/ | 도메인 HTTP 외부 접속 | 업로드 필요 |
-| `07_security_group_https.png` | AWS 인바운드 443 규칙 | HTTPS 외부 443 허용 | 업로드 필요 |
-| `08_certbot_success.png` | Certbot Successfully received/deployed | TLS 인증서 발급·설치 | 업로드 필요; 이메일 주소 숨길 것 |
-| `09_https_portfolio.png` | https://codyssey-b31-web.duckdns.org/ | HTTPS 포트폴리오 표시 | **자동 Chrome 외부 캡처 업로드 완료**: [portfolio-https-live.png](portfolio-https-live.png); 원본 모바일 화면은 비공개 보관 예정 |
-| `10_ec2_ssh.png` | EIC SSH 및 curl 응답 | 실제 원격 접속과 서버 응답 | 업로드 필요 |
-| `11_route_table.png` | 0.0.0.0/0 → IGW와 subnet 연결 | 퍼블릭 서브넷 라우팅 | 업로드 필요 |
-| `12_cleanup.png` | 인스턴스 Terminated 및 잔여 자원 확인 | 실습 종료 정리 | **사용자 요청으로 삭제 보류** |
+| 01 | 공인 IP HTTP 외부 포트폴리오 | [자동 외부 요청 기록](automated-external-check.txt): `http://43.202.56.199/` → 200, [README](../../README.md)에 방식 A 설명 | HTTP 전용 브라우저 캡처는 별도 미업로드. **HTTPS 화면은 업로드 완료**. 최종 제출에서 HTTP 스크린샷을 특정해 요구할 경우 추가 |
+| 02 | Docker `docker ps` Up·포트 | [실제 터미널 크롭본](docker_ps_actual_redacted.png), [명령 출력 검증](../validation-2026-11-22.md) | **공개 업로드 완료** |
+| 03 | Docker 자체 HTTP 200 | [실제 `curl` 텍스트](../validation-2026-11-22.md): `http://localhost:8080/` → `HTTP/1.1 200 OK` | 텍스트 증빙 완료; 별도 터미널 사진은 선택 |
+| 04 | Docker access log | [실제 로그 내용 요약](../troubleshooting.md): HTML/CSS/JS 요청 200, favicon 404 | 전체 로그 원문과 별도 캡처는 미업로드; 추가 제출 요구 때 보완 |
+| 05 | DuckDNS와 공인 IP 연결 | [README](../../README.md)에 실습 당시 IP·도메인·Certbot 성공, [자동 외부 검증](automated-external-check.txt)에서 HTTPS 200 | 원본 DuckDNS 사진은 공개 보류. **API 토큰은 절대 공개하지 않음** |
+| 06 | 도메인 HTTP 외부 접속 | [README](../../README.md)에 도메인 및 HTTP·HTTPS 배포 경과, [HTTPS 실접속 화면](portfolio-https-live.png) | 도메인 HTTP만 표시한 사진은 별도 미업로드; HTTPS 실접속 증빙은 완료 |
+| 07 | HTTPS 443 보안 그룹 규칙 | [README 구성표](../../README.md), [보안 위험·대안](../assessment-explanations.md), 실제 HTTPS 200 | 콘솔 원본 사진 공개 보류. **SSH 허용 CIDR 최종값은 보안 그룹 조회 필요** |
+| 08 | Let's Encrypt 인증서 발급·설치 | [README Certbot 기록](../../README.md), [실제 인증서 유효기간 출력](../validation-2026-11-22.md) | 텍스트 증빙 완료; Certbot 원본 스크린샷은 비공개 보관 대상 |
+| 09 | HTTPS 포트폴리오 외부 화면 | [실제 Chrome 외부 캡처](portfolio-https-live.png), [HTTP 200 기록](automated-external-check.txt) | **공개 업로드 완료** |
+| 10 | EC2 Instance Connect SSH 및 서버 응답 | [SSH 명령·호스트 출력](../terminal-evidence-audit-2026-11-22.md), [7항목 실제 검증](../validation-2026-11-22.md) | 텍스트 증빙 완료; 별도 휴대전화 SSH 사진은 공개 보류 |
+| 11 | 퍼블릭 라우팅 테이블·서브넷 연결 | [AWS 콘솔 실제 값](../network-console-verification-2026-11-22.md): 2개 경로 활성, 서브넷 명시적 연결 | 텍스트 증빙 완료; 계정 표시가 있는 콘솔 사진 공개 보류. **IGW 전체 ID는 추가 확인 전** |
+| 12 | 실습 종료 후 자원 정리 | [정리 체크리스트](../cleanup-checklist.md) | **사용자 요청으로 실제 자원 삭제·정리 보류**. 삭제 완료 증빙도 보류 |
 
-이미 확인한 실습 화면의 별도 PDF·ZIP 증빙 패키지를 제출할 때도 실제 캡처와 설명 문서를 구별해야 함.
+## 공개·비공개 증빙 원칙
 
-HTTPS 인증서에 쓰이는 **개인키**(`privkey.pem`)와 DuckDNS API 토큰, IAM 임시 비밀번호 및 SSH 키는 공개 저장소에 업로드하지 않는다.
+- 공개 GitHub에는 **실제 검증값을 문자로 기록**하고, 업로드한 이미지의 출처가 자동 Chrome 캡처인지 실제 사용자 터미널 크롭본인지 표시합니다.
+- 휴대전화 알림·AWS 계정 정보가 담긴 원본은 비공개 `Imprint`에 별도 보관하며, 공개 제출에 꼭 필요한 사진만 개인정보를 제거한 사본을 사용합니다. 비공개 원본 업로드 자체는 별도 확인 대상입니다.
+- IAM 비밀번호·SSH 개인키·Let's Encrypt `privkey.pem`·DuckDNS API 토큰은 저장소에 올리지 않습니다.
+- **최종 PNG 및 두 종류 Docker 보너스 이미지(Up 상태·외부 접속)는 현재 업로드 완료**입니다. 나머지 사진은 아래 표의 실제 텍스트·검증 근거로 일부 대체했으며, **모든 원본 사진의 업로드 완료를 주장하지 않습니다.**
